@@ -35,7 +35,7 @@ if ($compliance -eq $true) {
 
 $markTime = Get-Date -format "yyyyMMddHHmmss"
 
- if ($startfn -ne "") {
+if (($startfn -ne "") -and (Test-Path $startfn))  {
     Try
     {
         $start = Get-Content $startfn

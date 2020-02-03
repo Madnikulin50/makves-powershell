@@ -17,10 +17,8 @@ Param(
     [string]$makves_pwd = "admin"
 )
 
-
-$EventLevel="All"
 $NumberOfLastEventsToGet = $Count
-$EventLogName = ("Security")
+
 
 ## Init web server 
 $uri = $makves_url + "/data/upload/event"
@@ -43,7 +41,7 @@ if ($makves_url -eq "") {
 
  $markTime = Get-Date -format "yyyyMMddHHmmss"
 
- if ($startfn -ne "") {
+ if (($startfn -ne "") -and (Test-Path $startfn))  {
     Try
     {
         $start = Get-Content $fnstart
@@ -71,9 +69,6 @@ if ($outfilename -ne "") {
 Write-Host "computers: " $computers
 Write-Host "outfile: " $outfile
 Write-Host "target: " $target
-Write-Host "EventSource: " $EventSource
-Write-Host "EventLevel: " $EventLevel
-Write-Host "EventLogName: " $EventLogName
 
 
 if ($user -eq "current") {
@@ -197,7 +192,7 @@ function ExportFor($eid, $ln, $type) {
             $msg = "Error accessing Event Logs of $computer by Get-WinEvent + $PSItem.Exception.InnerExceptionMessage"
             Write-Host $msg -ForegroundColor Red
             try {    
-                $Events = get-eventlog -logname $EventLogName -newest 10000 -Computer $Computer
+                $Events = get-eventlog -logname $ln -newest 10000 -Computer $Computer
                 $Events | Where-Object {$eid -contains $_.EventID}
                 $Events | Select-Object -first $NumberOfLastEventsToGet
                 $Events | Foreach-Object {

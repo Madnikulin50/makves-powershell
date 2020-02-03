@@ -1,5 +1,5 @@
 param (
-    [Parameter(Mandatory = $False, Position = 1, ParameterSetName = "NormalRun")] [string]$folder = "C:\work\test",
+    [Parameter(Mandatory = $False, Position = 1, ParameterSetName = "NormalRun")] [string]$folder = "C:\work\test\MessageTracking",
     [string]$include = "*",
     [string]$exclude = "",
     [string]$tempfolder = "",
@@ -23,7 +23,7 @@ $basicAuthValue = "Basic $base64"
 $headers = @{ Authorization = $basicAuthValue}
 Add-Type -AssemblyName 'System.Net.Http'
 
-if ($startfn -ne "") {
+if (($startfn -ne "") -and (Test-Path $startfn)) {
     Try
     {
         $start = Get-Content $startfn

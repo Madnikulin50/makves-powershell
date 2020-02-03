@@ -6,7 +6,7 @@ param (
     [int]$hashlen = 1048576,
     [switch]$no_hash = $false,
     [switch]$extruct = $false,
-    [switch]$compliance = $true,
+    [switch]$compliance = $false,
     [switch]$monitor = $false,
     [string]$start = "",
     [string]$startfn = "", ##".file-monitor.time_mark",
@@ -41,7 +41,7 @@ if ($compliance -eq $true) {
 
  $markTime = Get-Date -format "yyyyMMddHHmmss"
 
- if ($startfn -ne "") {
+ if (($startfn -ne "") -and (Test-Path $startfn))  {
     Try
     {
         $start = Get-Content $startfn

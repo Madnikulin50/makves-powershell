@@ -346,27 +346,42 @@ function execute() {
   Write-Host "groups export finished to: " $outfile
 
   if ($null -eq $GetAdminact) {
-    Get-ADUser -server $server -searchbase $SearchBase `
-    -Filter * -Properties * | Where-Object {$_.info -NE 'Migrated'} | Select-Object "Name", "GivenName", "Surname", "sn", "cn", "distinguishedName",
-    "whenCreated", "whenChanged", "memberOf", "badPwdCount", "objectSid", "DisplayName", 
-    "sAMAccountName", "StreetAddress", "City", "state", "PostalCode", "Country", "Title",
-    "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
-    "Mail", "userAccountControl", "PasswordNeverExpires", "PasswordExpired", "DoesNotRequirePreAuth",
-    "CannotChangePassword", "PasswordNotRequired", "TrustedForDelegation", "TrustedToAuthForDelegation",
-    "Manager", "Enabled", "lastlogondate", "ObjectClass", "logonCount", "LogonHours", "UserPrincipalName", "ServicePrincipalName" | Foreach-Object {
-      inspectUser($_)
+    Get-ADUser -server $server -searchbase $SearchBase -Filter * | Foreach-Object {
+      $cur = $_
+      Try {
+        $filter = 'Name -eq "' + $_.Name + '"'
+        Get-ADUser -server $server -searchbase $SearchBase `
+        -Filter $filter -Properties * | Where-Object {$_.info -NE 'Migrated'} | Select-Object "Name", "GivenName", "Surname", "sn", "cn", "distinguishedName",
+        "whenCreated", "whenChanged", "memberOf", "badPwdCount", "objectSid", "DisplayName", 
+        "sAMAccountName", "StreetAddress", "City", "state", "PostalCode", "Country", "Title",
+        "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
+        "Mail", "userAccountControl", "PasswordNeverExpires", "PasswordExpired", "DoesNotRequirePreAuth",
+        "CannotChangePassword", "PasswordNotRequired", "TrustedForDelegation", "TrustedToAuthForDelegation",
+        "Manager", "Enabled", "lastlogondate", "ObjectClass", "logonCount", "LogonHours", "UserPrincipalName", "ServicePrincipalName" | Foreach-Object {
+          inspectUser($_)
+        }
+      } Catch {
+        Write-Host $cur.Name " error apps" "$($_.Exception.Message)"
+      }
     }
   } else {
-    Get-ADUser -server $server `
-    -Credential $GetAdminact -searchbase $SearchBase `
-    -Filter * -Properties * | Where-Object {$_.info -NE 'Migrated'} | Select-Object "Name", "GivenName", "Surname", "sn", "cn", "distinguishedName",
-    "whenCreated", "whenChanged", "memberOf", "badPwdCount", "objectSid", "DisplayName", 
-    "sAMAccountName", "StreetAddress", "City", "state", "PostalCode", "Country", "Title",
-    "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
-    "Mail", "userAccountControl", "PasswordNeverExpires", "PasswordExpired", "DoesNotRequirePreAuth",
-    "CannotChangePassword", "PasswordNotRequired", "TrustedForDelegation", "TrustedToAuthForDelegation",
-    "Manager", "Enabled", "lastlogondate", "ObjectClass", "logonCount", "LogonHours", "UserPrincipalName", "ServicePrincipalName" | Foreach-Object {
-      inspectUser($_)
+    Get-ADUser -server $server -searchbase $SearchBase -Credential $GetAdminact -Filter * | Foreach-Object {
+      $cur = $_
+      Try {
+        $filter = 'Name -eq "' + $_.Name + '"'
+        Get-ADUser -server $server -searchbase $SearchBase -Credential $GetAdminact `
+        -Filter $filter -Properties * | Where-Object {$_.info -NE 'Migrated'} | Select-Object "Name", "GivenName", "Surname", "sn", "cn", "distinguishedName",
+        "whenCreated", "whenChanged", "memberOf", "badPwdCount", "objectSid", "DisplayName", 
+        "sAMAccountName", "StreetAddress", "City", "state", "PostalCode", "Country", "Title",
+        "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
+        "Mail", "userAccountControl", "PasswordNeverExpires", "PasswordExpired", "DoesNotRequirePreAuth",
+        "CannotChangePassword", "PasswordNotRequired", "TrustedForDelegation", "TrustedToAuthForDelegation",
+        "Manager", "Enabled", "lastlogondate", "ObjectClass", "logonCount", "LogonHours", "UserPrincipalName", "ServicePrincipalName" | Foreach-Object {
+          inspectUser($_)
+        }
+      } Catch {
+        Write-Host $cur.Name " error apps" "$($_.Exception.Message)"
+      }
     }
   }
 }
