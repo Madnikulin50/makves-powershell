@@ -48,14 +48,23 @@ if ($start -ne "") {
 
 
 function store($item) {
+    $item | Add-Member -MemberType NoteProperty -Name Forwarder -Value "message-tracks-forwarder" -Force
+    $JSON = $item | ConvertTo-Json
+    
     if ($outfile -ne "") {
-        $item | ConvertTo-Json | Out-File -FilePath $outfile -Encoding UTF8 -Append
+        $JSON | Out-File -FilePath $outfile -Encoding UTF8 -Append
     }
-    $cur | Add-Member -MemberType NoteProperty -Name Forwarder -Value "message-tracks-forwarder" -Force
-    $JSON = $data | ConvertTo-Json
-    $body = [System.Text.Encoding]::UTF8.GetBytes($JSON.ToString());
-    $response = Invoke-WebRequest -Uri $uri -Method Post -Body $body -ContentType "application/json" -Headers $headers
-    return $response  
+    if ($uri -ne "") {
+        Try
+        {
+            $body = [System.Text.Encoding]::UTF8.GetBytes($JSON.ToString());
+            $response = Invoke-WebRequest -Uri $uri -Method Post -Body $body -ContentType "application/json" -Headers $headers
+            return $response
+        }
+        Catch {
+            Write-Host "Error send data to server:" +  $PSItem.Exception.Message
+        }
+    }
 }
 
 
@@ -78,7 +87,4 @@ if ($starttime -ne "") {
     }
 }
 
-
-
-
-Write-Host "MessageTracksExport finished export finished to: " $outfile
+Write-Host "MessageTracksExport finished export finished" -ForegroundColor Green

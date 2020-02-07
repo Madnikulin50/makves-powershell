@@ -78,14 +78,21 @@ if ($user -eq "current") {
 }
 
 function store($cur) {
+  $cur | Add-Member -MemberType NoteProperty -Name Forwarder -Value "ad-forwarder" -Force
+  $JSON = $cur | ConvertTo-Json
+    
   if ($outfile -ne "") {
-    $cur | ConvertTo-Json | Out-File -FilePath $outfile -Encoding UTF8 -Append
+    $JSON | Out-File -FilePath $outfile -Encoding UTF8 -Append
   }
-  if ($uri -ne "") { 
-    $cur | Add-Member -MemberType NoteProperty -Name Forwarder -Value "ad-forwarder" -Force
-    $JSON = $cur | ConvertTo-Json
-    $body = [System.Text.Encoding]::UTF8.GetBytes($JSON.ToString());
-    Invoke-WebRequest -Uri $uri -Method Post -Body $body -ContentType "application/json" -Headers $headers
+  if ($uri -ne "") {
+    Try
+    {      
+      $body = [System.Text.Encoding]::UTF8.GetBytes($JSON.ToString());
+      $resp = Invoke-WebRequest -Uri $uri -Method Post -Body $body -ContentType "application/json" -Headers $headers
+    }
+    Catch {
+        Write-Host "Error send data to server:" +  $PSItem.Exception.Message
+    }
   }
 }
 
@@ -100,22 +107,26 @@ function inspectComputer($cur) {
       Write-Host "skip " $cur.Name
       return
     }
-    Write-Host "write " $cur.Name
-
   }
 
   $ntname = "$($domain.NetBIOSName)\$($cur.sAMAccountName)"
   $cur | Add-Member -MemberType NoteProperty -Name NTName -Value $ntname -Force
   if ($notping -eq $false) {
-    if ($null -eq $GetAdminact) {
-      $licensies = Get-WmiObject SoftwareLicensingProduct -ComputerName $cur.DNSHostName -ErrorAction SilentlyContinue | Select-Object Description, LicenseStatus
-    } else {
-      $licensies = Get-WmiObject SoftwareLicensingProduct -Credential $GetAdminact -ComputerName $cur.DNSHostName -ErrorAction SilentlyContinue | Select-Object Description, LicenseStatus
+    Try {
+      if ($null -eq $GetAdminact) {
+        $licensies = Get-WmiObject SoftwareLicensingProduct -ComputerName $cur.DNSHostName -ErrorAction SilentlyContinue | Select-Object Description, LicenseStatus
+      } else {
+        $licensies = Get-WmiObject SoftwareLicensingProduct -Credential $GetAdminact -ComputerName $cur.DNSHostName -ErrorAction SilentlyContinue | Select-Object Description, LicenseStatus
+      }
+      if ($licensies -ne $Null) {
+        Write-Host $cur.DNSHostName " : " $($licensies)
+        $cur | Add-Member -MemberType NoteProperty -Name OperatingSystemLicensies -Value $licensies -Force
+      }
+    } Catch {
+      $msg = "Error get licensies from $cur.DNSHostName : $PSItem.Exception.InnerExceptionMessage"
+      Write-Host $msg -ForegroundColor Yellow
     }
-    if ($licensies -ne $Null) {
-      Write-Host $cur.DNSHostName " : " $($licensies)
-      $cur | Add-Member -MemberType NoteProperty -Name OperatingSystemLicensies -Value $licensies -Force
-    }
+    
   
     Try {
       if ($null -eq $GetAdminact) {
@@ -128,7 +139,8 @@ function inspectComputer($cur) {
         $cur | Add-Member -MemberType NoteProperty -Name UserProfiles -Value $userprofiles -Force
       }    
     } Catch {
-      Write-Host $cur.DNSHostName  " : " "$($_.Exception.Message)"
+      $msg = "Error get user profiles from $cur.DNSHostName : $PSItem.Exception.InnerExceptionMessage"
+      Write-Host $msg -ForegroundColor Yellow
     }
   
     Try {
@@ -204,7 +216,8 @@ function inspectComputer($cur) {
              $cur | Add-Member -MemberType NoteProperty -Name Applications -Value $apps -Force
           }
         } Catch {
-          Write-Host $cur.DNSHostName " error apps" "$($_.Exception.Message)"
+          $msg = "Error get apps from $cur.DNSHostName : $PSItem.Exception.InnerExceptionMessage"
+          Write-Host $msg -ForegroundColor Yellow
         }
      }
   
@@ -230,14 +243,12 @@ function Get-ADPrincipalGroupMembershipRecursive() {
   
 
   foreach( $groupDsn in $obj.memberOf ) {
-
     if ($null -eq $GetAdminact) {
       $tmpGrp = Get-ADObject -server $server $groupDsn -Properties * | Select-Object "Name", "cn", "distinguishedName", "objectSid", "DisplayName", "memberOf"
     } else {
       $tmpGrp = Get-ADObject -server $server  -Credential $GetAdminact $groupDsn -Properties * | Select-Object "Name", "cn", "distinguishedName", "objectSid", "DisplayName", "memberOf"
     }
       if( ($groups | Where-Object { $_.DistinguishedName -eq $groupDsn }).Count -eq 0 ) {
-          $add = $tmpGrp 
           $groups +=  $tmpGrp           
           $groups = Get-ADPrincipalGroupMembershipRecursive $groupDsn $groups
       }
@@ -403,4 +414,4 @@ if ($timeout -eq 0) {
   }
 }
 
-Write-Host "Export finished..."
+Write-Host "Export finished..."  -ForegroundColor Green

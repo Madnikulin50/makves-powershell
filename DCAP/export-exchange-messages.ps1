@@ -5,6 +5,7 @@
     [string]$domain   = "URD",
     [switch]$save_body = $false,
     [switch]$compliance = $false,
+    [switch]$count = 1000,
     [string]$start = "",
     [string]$startfn = "", ##".file-monitor.time_mark",
     [string]$makves_url = "", ##"http://10.0.0.10:8000",
@@ -72,7 +73,7 @@ Write-Host "outfile: " $outfile
     {
         Try
         {
-            $compliance =  Get-Compliance -File $t.Body.Text
+            $compliance =  Get-Compliance -Text $t.Body.Text
             $t | Add-Member -MemberType NoteProperty -Name Compliance -Value $compliance -Force
         }
         Catch {
@@ -110,8 +111,10 @@ Write-Host "outfile: " $outfile
     }
 }
 
+# load the assembly
+[void] [Reflection.Assembly]::LoadFile("Microsoft.Exchange.WebServices.dll")
   
-  Get-Mailbox -ResultSize Unlimited | ForEach-Object {
+Get-Mailbox -ResultSize Unlimited | ForEach-Object {
     $email    = $_.PrimarySmtpAddress
 
     # load the assembly
@@ -139,7 +142,7 @@ Write-Host "outfile: " $outfile
     $psPropertySet = new-object Microsoft.Exchange.WebServices.Data.PropertySet([Microsoft.Exchange.WebServices.Data.BasePropertySet]::FirstClassProperties)
     $psPropertySet.RequestedBodyType = [Microsoft.Exchange.WebServices.Data.BodyType]::Text;
 
-    $items = $inbox.FindItems(100)
+    $items = $inbox.FindItems($count)
 
     # output unread count
     Write-Host -Text "Unread count: ",$inbox.UnreadCount

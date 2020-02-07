@@ -1,12 +1,12 @@
 param (
-    [string]$folder = "C:\work\test",
+    [string]$folder = "C:\work\test\test",
     [string]$outfilename = "folder", ##"",
     [string]$base = "",
     [string]$server = "",
     [int]$hashlen = 1048576,
     [switch]$no_hash = $false,
     [switch]$extruct = $false,
-    [switch]$compliance = $false,
+    [switch]$compliance = $true,
     [switch]$monitor = $false,
     [string]$start = "",
     [string]$startfn = "", ##".file-monitor.time_mark",
@@ -239,11 +239,22 @@ function inspectFile($cur) {
             Try
             {
                 $compliance =  Get-Compliance -File $path
+                
                 $cur | Add-Member -MemberType NoteProperty -Name Compliance -Value $compliance -Force
             }
             Catch {
 				Write-Host "Get-Compliance error:" + $PSItem.Exception.Message
             }
+
+            ##Try
+            ##{
+            ##    $content =  Get-Document-Text -File $path
+            ##    Write-Host "Get-Compliance error:" + $PSItem.Exception.Message
+            ##    $cur | Add-Member -MemberType NoteProperty -Name Content -Value $content -Force
+            ##}
+            ##Catch {
+			##	Write-Host "Get-Document-Text error:" + $PSItem.Exception.Message
+            ##}
         }
 
         $cur | Add-Member -MemberType NoteProperty -Name Hash -Value $hash -Force

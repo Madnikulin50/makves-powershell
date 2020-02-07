@@ -28,7 +28,7 @@ param (
  
  $markTime = Get-Date -format "yyyyMMddHHmmss"
  
- if (($startfn -ne "") -and (Test-Path $startfn)) {
+  if ($startfn -ne "") {
      Try
      {
          $start = Get-Content $startfn
@@ -55,7 +55,7 @@ param (
  Write-Host "outfile: " $outfile
 
  function inspect($item) {
-  $ t = $item 
+  $t = $item 
   $t | Add-Member -MemberType NoteProperty -Name Type -Value "exchange-mailbox" -Force        
   $t | Add-Member -MemberType NoteProperty -Name Forwarder -Value "exchange-mailboxes-forwarder" -Force
   
@@ -73,8 +73,8 @@ param (
           {
               $body = [System.Text.Encoding]::UTF8.GetBytes($JSON.ToString());
 
-              Invoke-WebRequest -Uri $uri -Method Post -Body $body -ContentType "application/json" -Headers $headers
-              Write-Host  "Send data to server:" + $cur.Name
+              $resp = Invoke-WebRequest -Uri $uri -Method Post -Body $body -ContentType "application/json" -Headers $headers
+              #Write-Host  "Send data to server:" + $cur.Name
           }
           Catch {
               Write-Host "Error send data to server:" + $PSItem.Exception.Message
@@ -93,13 +93,29 @@ foreach-object {
     try
     {
         $cur = $_
-        $fstat = Get-MailboxFolderStatistics -Identity $cur.alias
-        $s = Get-MailboxStatistics -Identity $cur.alias | Select-Object DisplayName, LastLogonTime, ItemCount, LastLogoffTime, LegacyDN, LastLoggedOnUserAccount, ObjectClass
-        $s | ForEach-Object {
-            $cs = $_ | ConvertTo-Json
-            Write-Host "Statistic: " $cs
+        try{
+            $fstat = Get-MailboxFolderStatistics -Identity $cur.alias
+            $cur | Add-Member -MemberType NoteProperty -Name Folders -Value $fstat -Force
         }
-        $cur | Add-Member -MemberType NoteProperty -Name Statistic -Value $s -Force
+        Catch {
+            $msg = "No Get-MailboxFolderStatistics: + $PSItem.Exception.InnerExceptionMessage"
+            Write-Host $msg -ForegroundColor Yellow
+        }
+        
+
+        try{
+            $s = Get-MailboxStatistics -Identity $cur.alias | Select-Object DisplayName, LastLogonTime, ItemCount, LastLogoffTime, LegacyDN, LastLoggedOnUserAccount, ObjectClass
+            $s | ForEach-Object {
+                $cs = $_ | ConvertTo-Json
+               # Write-Host "Statistic: " $cs
+            }
+            $cur | Add-Member -MemberType NoteProperty -Name Statistic -Value $s -Force
+        }
+        Catch {
+            $msg = "No Get-MailboxStatistics: + $PSItem.Exception.InnerExceptionMessage"
+            Write-Host $msg -ForegroundColor Yellow
+        }
+
         
         try{
             $uc= Get-MailboxUserConfiguration -Identity ($cur.alias)
@@ -110,51 +126,66 @@ foreach-object {
             }
         }
         Catch {
-            $msg = "Error + $PSItem.Exception.InnerExceptionMessage"
-            Write-Host $msg -ForegroundColor Red
+            $msg = "No Get-MailboxUserConfiguration: + $PSItem.Exception.InnerExceptionMessage"
+            Write-Host $msg -ForegroundColor Yellow
         }
+        
+        try {
+           $p = Get-MailboxPermission -Identity ($cur.alias) | Select-Object Identity, User, AccessRights
+            if ($p -ne $null) {
 
-        $p = Get-MailboxPermission -Identity ($cur.alias) | Select-Object Identity, User, AccessRights
-        if ($p -ne $null) {
-
-          [string]$t = "["
-          $p| foreach-object {
-            if ($t.length -ne 1) {
-                $t += ","
+              [string]$t = "["
+              $p| foreach-object {
+                if ($t.length -ne 1) {
+                    $t += ","
+                }
+                $t += "{`"Identity`": `"$($_.Identity)`","
+                $t += "`"User`": `"$($_.User)`","
+                $t += "`"AccessRights`": `"$($_.AccessRights)`"}"
+              }
+              $t += "]"
+              #Write-Host "permision: " $t
+              $cur | Add-Member -MemberType NoteProperty -Name Permissions -Value $t -Force
             }
-            $t += "{`"Identity`": `"$($_.Identity)`","
-            $t += "`"User`": `"$($_.User)`","
-            $t += "`"AccessRights`": `"$($_.AccessRights)`"}"
-          }
-          $t += "]"
-          Write-Host "permision: " $t
-          $cur | Add-Member -MemberType NoteProperty -Name Permissions -Value $t -Force
+        } Catch {
+            $msg = "No Get-MailboxPermission: + $PSItem.Exception.InnerExceptionMessage"
+            Write-Host $msg -ForegroundColor Yellow
         }
 
+        try {
+            $p = Get-MailboxFolderPermission -Identity ($cur.alias + ":\") -ErrorAction SilentlyContinue | Select-Object Identity, FolderName, User, AccessRights
+            if ($p -ne $null) {
 
-        $p = Get-MailboxFolderPermission -Identity ($cur.alias + ":\") -ErrorAction SilentlyContinue | Select-Object Identity, FolderName, User, AccessRights
-        if ($p -ne $null) {
-
-          [string]$t = "["
-          $p| foreach-object {
-            if ($t.length -ne 1) {
-                $t += ","
+              [string]$t = "["
+              $p| foreach-object {
+                if ($t.length -ne 1) {
+                    $t += ","
+                }
+                $t += "{`"Identity`": `"$($_.Identity)`","
+                $t += "`"FolderName`": `"$($_.FolderName)`","
+                $t += "`"User`": `"$($_.User)`","
+                $t += "`"AccessRights`": `"$($_.AccessRights)`"}"
+              }
+              $t += "]"
+              #Write-Host "folder permision: " $t
+              $cur | Add-Member -MemberType NoteProperty -Name FolderPermissions -Value $t -Force
             }
-            $t += "{`"Identity`": `"$($_.Identity)`","
-            $t += "`"FolderName`": `"$($_.FolderName)`","
-            $t += "`"User`": `"$($_.User)`","
-            $t += "`"AccessRights`": `"$($_.AccessRights)`"}"
-          }
-          $t += "]"
-          Write-Host "folder permision: " $t
-          $cur | Add-Member -MemberType NoteProperty -Name FolderPermissions -Value $t -Force
+        } Catch {
+            $msg = "No Get-MailboxFolderPermission: + $PSItem.Exception.InnerExceptionMessage"
+            Write-Host $msg -ForegroundColor Yellow
         }
-    
-        $cur | Add-Member -MemberType NoteProperty -Name Folders -Value $fstat -Force
+
+        $msg = "Writing " + $cur.Alias + "-" + $cur.Name
+
+        Write-Host $msg
+        
         inspect($cur)
    }
    Catch {
-            $msg = "Error + $PSItem.Exception.InnerExceptionMessage"
-            Write-Host $msg -ForegroundColor Red
+            $msg = "Common + $PSItem.Exception.InnerExceptionMessage"
+            Write-Host $msg -ForegroundColor Yellow
   }
 }
+
+
+Write-Host $PSItem.Exception.Message -ForegroundColor Green

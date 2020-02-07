@@ -8,13 +8,12 @@ Param(
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $pwd = "",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $start = "",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $fwd = "",
-    [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $syslog = "",
-    [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $syslog_port = 514,
     [Parameter(Mandatory = $False, Position = 10, ParameterSetName = "NormalRun")] [ValidateSet("All","Logon","Service","User","Computer", "Clean", "File", "MSSQL", "RAS", "USB", "Printer", "Sysmon", "TS")] [array]$target="All",
     [string]$startfn = "", ##".event-monitor.time_mark",
     [string]$makves_url = "", ##"http://10.0.0.10:8000",
     [string]$makves_user = "admin",
-    [string]$makves_pwd = "admin"
+    [string]$makves_pwd = "admin",
+    [string]$exclude_user = ""
 )
 
 $NumberOfLastEventsToGet = $Count
@@ -89,28 +88,19 @@ $ErrorActionPreference = "SilentlyContinue"
 
 $FilterHashProperties = $null
 
-if ($syslog -ne "") {
-    Write-Host "syslog: " $syslog
-    Import-Module (Join-Path $PSScriptRoot "Send-SyslogMessage.ps1")   
-   
-}
-
 
 function store($data) {
     if ($outname -ne "") {
         $data | ConvertTo-Json | Out-File -FilePath $outfile -Encoding UTF8 -Append
     }
-    if ($syslog -ne "") {
-        SendSyslog $data
-    }
+   
     if ($uri -ne "") {
         $data | Add-Member -MemberType NoteProperty -Name Forwarder -Value "event-forwarder" -Force
         $JSON = $data | ConvertTo-Json
         Try
         {
             $body = [System.Text.Encoding]::UTF8.GetBytes($JSON.ToString());
-            Invoke-WebRequest -Uri $uri -Method Post -Body $body -ContentType "application/json" -Headers $headers
-            Write-Host "Send data to server:" + $data.Name
+            $resp = Invoke-WebRequest -Uri $uri -Method Post -Body $body -ContentType "application/json" -Headers $headers
         }
         Catch {
             Write-Host "Error send data to server:" +  $PSItem.Exception.Message
@@ -185,8 +175,7 @@ function ExportFor($eid, $ln, $type) {
                 store($cur)
 
             }
-            Write-host "Found at least $($Events.count) events ! Here are the $NumberOfLastEventsToGet last ones"
-                
+            Write-host "Found at least $($Events.count) events ! Here are the $NumberOfLastEventsToGet last ones"     
         }
         Catch {
             $msg = "Error accessing Event Logs of $computer by Get-WinEvent + $PSItem.Exception.InnerExceptionMessage"
@@ -284,3 +273,5 @@ if ($startfn -ne "") {
     $markTime | Out-File -FilePath $startfn -Encoding UTF8
     Write-Host "Store new mark: " $markTime
 }
+
+Write-Host "Events export done" -ForegroundColor Green
