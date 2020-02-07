@@ -72,17 +72,16 @@ Write-Host "target: " $target
 
 if ($user -eq "current") {
     $GetAdminact = $null 
-  } else {
+} else {
     if ($user -ne "") {
         $pass = ConvertTo-SecureString -AsPlainText $pwd -Force    
         $GetAdminact = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $user, $pass    
     } else {
         $GetAdminact = Get-Credential
     }
-  }
+}
 
 
-$stopwatch = [system.diagnostics.stopwatch]::StartNew()
 $DebugPreference = "Continue"
 $ErrorActionPreference = "SilentlyContinue"
 
