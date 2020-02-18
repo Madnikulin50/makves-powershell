@@ -47,7 +47,17 @@ function Test-ActiveDirectory {
         [string]$makves_url = "", ##"http://10.0.0.10:8000",
         [string]$makves_user = "admin",
         [string]$makves_pwd = "admin",
-        [int]$timeout = 0
+        [int]$timeout = 0,
+        [bool]$restrict_fileds = $false,
+        [string[]]$fields = ("Name", "dn", "sn", "cn", "distinguishedName", "whenCreated", "whenChanged", "memberOf", "badPwdCount", "objectSid", "DisplayName", 
+        "sAMAccountName", "IPv4Address", "IPv6Address", "OperatingSystem", "OperatingSystemHotfix", "OperatingSystemServicePack", "OperatingSystemVersion",
+        "PrimaryGroup", "ManagedBy", "userAccountControl", "Enabled", "lastlogondate", "ObjectClass", "DNSHostName", "ObjectCategory", "LastBadPasswordAttempt", "UserPrincipalName", "ServicePrincipalName",
+        "GivenName", "Surname", "sn", "memberOf", "badPwdCount", "objectSid", "DisplayName", 
+        "StreetAddress", "City", "state", "PostalCode", "Country", "Title",
+        "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
+        "Mail", "PasswordNeverExpires", "PasswordExpired", "DoesNotRequirePreAuth",
+        "CannotChangePassword", "PasswordNotRequired", "TrustedForDelegation", "TrustedToAuthForDelegation",
+        "Manager", "logonCount", "LogonHours")
     )
 
     Write-Host "base: " $base
@@ -381,22 +391,38 @@ function Test-ActiveDirectory {
     
 
         if ($null -eq $GetAdminact) {
-            Get-ADComputer -Filter * -Properties * -server $server -searchbase $SearchBase |
-            Select-Object "Name", "dn", "sn", "cn", "distinguishedName", "whenCreated", "whenChanged", "memberOf", "badPwdCount", "objectSid", "DisplayName", 
-            "sAMAccountName", "IPv4Address", "IPv6Address", "OperatingSystem", "OperatingSystemHotfix", "OperatingSystemServicePack", "OperatingSystemVersion",
-            "PrimaryGroup", "ManagedBy", "userAccountControl", "Enabled", "lastlogondate", "ObjectClass", "DNSHostName", "ObjectCategory", "LastBadPasswordAttempt", "UserPrincipalName", "ServicePrincipalName" |
-            Foreach-Object {
-                inspectComputer($_)
+            if ($false -eq $restrict_fileds) {
+                Get-ADComputer -Filter * -Properties * -server $server -searchbase $SearchBase |
+                Select-Object "Name", "dn", "sn", "cn", "distinguishedName", "whenCreated", "whenChanged", "memberOf", "badPwdCount", "objectSid", "DisplayName", 
+                "sAMAccountName", "IPv4Address", "IPv6Address", "OperatingSystem", "OperatingSystemHotfix", "OperatingSystemServicePack", "OperatingSystemVersion",
+                "PrimaryGroup", "ManagedBy", "userAccountControl", "Enabled", "lastlogondate", "ObjectClass", "DNSHostName", "ObjectCategory", "LastBadPasswordAttempt", "UserPrincipalName", "ServicePrincipalName" |
+                Foreach-Object {
+                    inspectComputer($_)
+                }
+            } else {
+                Get-ADComputer -Filter * -Properties $fields -server $server -searchbase $SearchBase |
+                Foreach-Object {
+                    inspectComputer($_)
+                }
             }
+            
         }
         else {
-            Get-ADComputer -Filter * -Properties * -server $server  -Credential $GetAdminact -searchbase $SearchBase |
-            Select-Object "Name", "dn", "sn", "cn", "distinguishedName", "whenCreated", "whenChanged", "memberOf", "badPwdCount", "objectSid", "DisplayName", 
-            "sAMAccountName", "IPv4Address", "IPv6Address", "OperatingSystem", "OperatingSystemHotfix", "OperatingSystemServicePack", "OperatingSystemVersion",
-            "PrimaryGroup", "ManagedBy", "userAccountControl", "Enabled", "lastlogondate", "ObjectClass", "DNSHostName", "ObjectCategory", "LastBadPasswordAttempt", "UserPrincipalName", "ServicePrincipalName" |
-            Foreach-Object {
-                inspectComputer($_)
+            if ($false -eq $restrict_fileds) {
+                Get-ADComputer -Filter * -Properties * -server $server  -Credential $GetAdminact -searchbase $SearchBase |
+                Select-Object "Name", "dn", "sn", "cn", "distinguishedName", "whenCreated", "whenChanged", "memberOf", "badPwdCount", "objectSid", "DisplayName", 
+                "sAMAccountName", "IPv4Address", "IPv6Address", "OperatingSystem", "OperatingSystemHotfix", "OperatingSystemServicePack", "OperatingSystemVersion",
+                "PrimaryGroup", "ManagedBy", "userAccountControl", "Enabled", "lastlogondate", "ObjectClass", "DNSHostName", "ObjectCategory", "LastBadPasswordAttempt", "UserPrincipalName", "ServicePrincipalName" |
+                Foreach-Object {
+                    inspectComputer($_)
+                }
+            } else {
+                Get-ADComputer -Filter * -Properties $fields -server $server  -Credential $GetAdminact -searchbase $SearchBase | 
+                Foreach-Object {
+                    inspectComputer($_)
+                }
             }
+           
         }
 
         if ("" -ne $base) {
@@ -408,52 +434,82 @@ function Test-ActiveDirectory {
     
     
         if ($null -eq $GetAdminact) {
-            Get-ADGroup -server $server -searchbase $SearchBase `
-                -Filter * -Properties * | Where-Object { $_.info -NE 'Migrated' } | Select-Object "Name", "GivenName", "Surname", "sn", "cn", "distinguishedName",
-            "whenCreated", "whenChanged", "memberOf", "objectSid", "DisplayName", 
-            "sAMAccountName", "StreetAddress", "City", "state", "PostalCode", "Country", "Title",
-            "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
-            "Mail", "userAccountControl", "Manager", "ObjectClass", "logonCount", "UserPrincipalName", "ServicePrincipalName" | Foreach-Object {
-                inspectGroup($_)  
+            if ($false -eq $restrict_fileds) {
+                Get-ADGroup -server $server -searchbase $SearchBase `
+                    -Filter * -Properties * | Where-Object { $_.info -NE 'Migrated' } | Select-Object "Name", "GivenName", "Surname", "sn", "cn", "distinguishedName",
+                "whenCreated", "whenChanged", "memberOf", "objectSid", "DisplayName", 
+                "sAMAccountName", "StreetAddress", "City", "state", "PostalCode", "Country", "Title",
+                "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
+                "Mail", "userAccountControl", "Manager", "ObjectClass", "logonCount", "UserPrincipalName", "ServicePrincipalName" | Foreach-Object {
+                    inspectGroup($_)  
+                }
+            } else {
+                Get-ADGroup -server $server -searchbase $SearchBase `
+                    -Filter * -Properties $fields | Where-Object { $_.info -NE 'Migrated' } | Foreach-Object {
+                    inspectGroup($_)  
+                }
             }
         }
         else {
-            Get-ADGroup -server $server `
+            if ($false -eq $restrict_fileds) {    
+                Get-ADGroup -server $server `
+                    -Credential $GetAdminact -searchbase $SearchBase `
+                    -Filter * -Properties * | Where-Object { $_.info -NE 'Migrated' } | Select-Object "Name", "GivenName", "Surname", "sn", "cn", "distinguishedName",
+                "whenCreated", "whenChanged", "memberOf", "objectSid", "DisplayName", 
+                "sAMAccountName", "StreetAddress", "City", "state", "PostalCode", "Country", "Title",
+                "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
+                "Mail", "userAccountControl", "Manager", "ObjectClass", "logonCount", "UserPrincipalName", "ServicePrincipalName" | Foreach-Object {
+                    inspectGroup($_)  
+                }
+            } else {
+                Get-ADGroup -server $server `
                 -Credential $GetAdminact -searchbase $SearchBase `
-                -Filter * -Properties * | Where-Object { $_.info -NE 'Migrated' } | Select-Object "Name", "GivenName", "Surname", "sn", "cn", "distinguishedName",
-            "whenCreated", "whenChanged", "memberOf", "objectSid", "DisplayName", 
-            "sAMAccountName", "StreetAddress", "City", "state", "PostalCode", "Country", "Title",
-            "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
-            "Mail", "userAccountControl", "Manager", "ObjectClass", "logonCount", "UserPrincipalName", "ServicePrincipalName" | Foreach-Object {
-                inspectGroup($_)  
+                -Filter * -Properties $fields | Where-Object { $_.info -NE 'Migrated' } | Foreach-Object {
+                    inspectGroup($_)  
+            }
             }
         }
 
         Write-Host "groups export finished to: " $outfile
 
         if ($null -eq $GetAdminact) {
-            Get-ADUser -server $server -searchbase $SearchBase `
-                -Filter * -Properties * | Where-Object { $_.info -NE 'Migrated' } | Select-Object "Name", "GivenName", "Surname", "sn", "cn", "distinguishedName",
-            "whenCreated", "whenChanged", "memberOf", "badPwdCount", "objectSid", "DisplayName", 
-            "sAMAccountName", "StreetAddress", "City", "state", "PostalCode", "Country", "Title",
-            "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
-            "Mail", "userAccountControl", "PasswordNeverExpires", "PasswordExpired", "DoesNotRequirePreAuth",
-            "CannotChangePassword", "PasswordNotRequired", "TrustedForDelegation", "TrustedToAuthForDelegation",
-            "Manager", "Enabled", "lastlogondate", "ObjectClass", "logonCount", "LogonHours", "UserPrincipalName", "ServicePrincipalName" | Foreach-Object {
-                inspectUser($_)
+            if ($false -eq $restrict_fileds) {
+                Get-ADUser -server $server -searchbase $SearchBase `
+                    -Filter * -Properties * | Where-Object { $_.info -NE 'Migrated' } | Select-Object "Name", "GivenName", "Surname", "sn", "cn", "distinguishedName",
+                "whenCreated", "whenChanged", "memberOf", "badPwdCount", "objectSid", "DisplayName", 
+                "sAMAccountName", "StreetAddress", "City", "state", "PostalCode", "Country", "Title",
+                "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
+                "Mail", "userAccountControl", "PasswordNeverExpires", "PasswordExpired", "DoesNotRequirePreAuth",
+                "CannotChangePassword", "PasswordNotRequired", "TrustedForDelegation", "TrustedToAuthForDelegation",
+                "Manager", "Enabled", "lastlogondate", "ObjectClass", "logonCount", "LogonHours", "UserPrincipalName", "ServicePrincipalName" | Foreach-Object {
+                    inspectUser($_)
+                }
+            } else {
+                Get-ADUser -server $server -searchbase $SearchBase `
+                -Filter * -Properties $fields | Where-Object { $_.info -NE 'Migrated' } | Foreach-Object {
+                    inspectUser($_)
+                }
             }
         }
         else {
-            Get-ADUser -server $server `
-                -Credential $GetAdminact -searchbase $SearchBase `
-                -Filter * -Properties * | Where-Object { $_.info -NE 'Migrated' } | Select-Object "Name", "GivenName", "Surname", "sn", "cn", "distinguishedName",
-            "whenCreated", "whenChanged", "memberOf", "badPwdCount", "objectSid", "DisplayName", 
-            "sAMAccountName", "StreetAddress", "City", "state", "PostalCode", "Country", "Title",
-            "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
-            "Mail", "userAccountControl", "PasswordNeverExpires", "PasswordExpired", "DoesNotRequirePreAuth",
-            "CannotChangePassword", "PasswordNotRequired", "TrustedForDelegation", "TrustedToAuthForDelegation",
-            "Manager", "Enabled", "lastlogondate", "ObjectClass", "logonCount", "LogonHours", "UserPrincipalName", "ServicePrincipalName" | Foreach-Object {
-                inspectUser($_)
+            if ($false -eq $restrict_fileds) {
+                Get-ADUser -server $server `
+                    -Credential $GetAdminact -searchbase $SearchBase `
+                    -Filter * -Properties * | Where-Object { $_.info -NE 'Migrated' } | Select-Object "Name", "GivenName", "Surname", "sn", "cn", "distinguishedName",
+                "whenCreated", "whenChanged", "memberOf", "badPwdCount", "objectSid", "DisplayName", 
+                "sAMAccountName", "StreetAddress", "City", "state", "PostalCode", "Country", "Title",
+                "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
+                "Mail", "userAccountControl", "PasswordNeverExpires", "PasswordExpired", "DoesNotRequirePreAuth",
+                "CannotChangePassword", "PasswordNotRequired", "TrustedForDelegation", "TrustedToAuthForDelegation",
+                "Manager", "Enabled", "lastlogondate", "ObjectClass", "logonCount", "LogonHours", "UserPrincipalName", "ServicePrincipalName" | Foreach-Object {
+                    inspectUser($_)
+                }
+            } else {
+                Get-ADUser -server $server `
+                    -Credential $GetAdminact -searchbase $SearchBase `
+                    -Filter * -Properties $fields | Where-Object { $_.info -NE 'Migrated' } | Foreach-Object {
+                    inspectUser($_)
+                }
             }
         }
     }

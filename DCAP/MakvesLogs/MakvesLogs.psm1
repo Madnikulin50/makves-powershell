@@ -49,7 +49,7 @@
 #>
 function Test-EventLog {
     Param(
-    [string[]]$computers = ("acme.local"),
+    [string[]]$computers = (""),
     [string]$outfilename = "events",
     [int32]$Count = 3000,
     [string]$user = "",
@@ -206,9 +206,17 @@ function Test-EventLog {
             try
             {
                 if ($null -eq $GetAdminact) {
-                    $Events = Get-WinEvent -FilterHashtable $FilterHashProperties -Computer $Computer -ErrorAction SilentlyContinue 
+                    if ("" -eq $Computer) {
+                        $Events = Get-WinEvent -FilterHashtable $FilterHashProperties -ErrorAction SilentlyContinue -MaxEvents $Count
+                    } else {
+                        $Events = Get-WinEvent -FilterHashtable $FilterHashProperties -Computer $Computer -ErrorAction SilentlyContinue -MaxEvents $Count
+                    }
                 } else {
-                    $Events = Get-WinEvent -Credential $GetAdminact -FilterHashtable $FilterHashProperties -Computer $Computer -ErrorAction SilentlyContinue 
+                    if ("" -eq $Computer) {
+                        $Events = Get-WinEvent -Credential $GetAdminact -FilterHashtable $FilterHashProperties -ErrorAction SilentlyContinue -MaxEvents $Count
+                    } else {
+                        $Events = Get-WinEvent -Credential $GetAdminact -FilterHashtable $FilterHashProperties -Computer $Computer -ErrorAction SilentlyContinue -MaxEvents $Count
+                    }
                 }
                 $Events | Select-Object -first $NumberOfLastEventsToGet
                 $Events | Foreach-Object {

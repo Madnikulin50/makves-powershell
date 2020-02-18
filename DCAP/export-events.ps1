@@ -1,16 +1,16 @@
 
 [CmdLetBinding(DefaultParameterSetName = "NormalRun")]
 Param(
-    [Parameter(Mandatory = $False, Position = 1, ParameterSetName = "NormalRun")] $computers = ("acme.local"),
+    [Parameter(Mandatory = $False, Position = 1, ParameterSetName = "NormalRun")] $computers = (""),
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $outfilename = "events",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $Count = 3000,
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $user = "current",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $pwd = "",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $start = "",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $fwd = "",
-    [Parameter(Mandatory = $False, Position = 10, ParameterSetName = "NormalRun")] [ValidateSet("All","Logon","Service","User","Computer", "Clean", "File", "MSSQL", "RAS", "USB", "Printer", "Sysmon", "TS")] [array]$target="All",
+    [Parameter(Mandatory = $False, Position = 10, ParameterSetName = "NormalRun")] [ValidateSet("All","Logon","Service","User","Computer", "Clean", "File", "MSSQL", "RAS", "USB", "Printer", "Sysmon", "TS")] [array]$target="File",
     [string]$startfn = "", ##".event-monitor.time_mark",
-    [string]$makves_url = "", ##"http://10.0.0.10:8000",
+    [string]$makves_url = "http://127.0.0.1:8000",
     [string]$makves_user = "admin",
     [string]$makves_pwd = "admin",
     [string]$exclude_user = ""
