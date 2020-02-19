@@ -292,7 +292,7 @@ function Test-EventLog {
             }
     
             if ($i -eq "File" -or $i -eq "All") {
-                ExportFor("4656", "4663", "4660", "4658", "5140", "5142", "5143", "5144", "5145") "Security" "file"
+                ExportFor("4656", "4663", "4660", "4670", "4658", "5140", "5142", "5143", "5144", "5145") "Security" "file"
             }
             if ($i -eq "Printer" -or $i -eq "All") {
                 ExportFor ("307")  ("Microsoft-Windows-PrintService/Operational") "printer"

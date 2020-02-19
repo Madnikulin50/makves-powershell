@@ -1,6 +1,6 @@
 ﻿[CmdLetBinding(DefaultParameterSetName = "NormalRun")]
 Param(
-    [Parameter(Mandatory = $False, Position = 1, ParameterSetName = "NormalRun")] $computers = ("LAPTOP-AI80RK8G"),
+    [Parameter(Mandatory = $False, Position = 1, ParameterSetName = "NormalRun")] $computers = (""),
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $outfilename = "dc_logs",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $Count = 1000,
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $Exclude = "",
@@ -104,29 +104,42 @@ function execute () {
         try
         {
             if ($null -eq $GetAdminact) {
-                $Events = Get-WinEvent -FilterHashtable $FilterHashProperties -Computer $Computer -ErrorAction SilentlyContinue -MaxEvents $Count
+                if ("" -eq $Computer) {
+                    $Events = Get-WinEvent -FilterHashtable $FilterHashProperties -ErrorAction SilentlyContinue -MaxEvents $Count
+                } else {
+                    $Events = Get-WinEvent -FilterHashtable $FilterHashProperties -Computer $Computer -ErrorAction SilentlyContinue -MaxEvents $Count
+                }
+                
             } else {
-                $Events = Get-WinEvent -Credential $GetAdminact -FilterHashtable $FilterHashProperties -Computer $Computer -ErrorAction SilentlyContinue -MaxEvents $Count 
+                if ("" -eq $Computer) {
+                    $Events = Get-WinEvent -Credential $GetAdminact -FilterHashtable $FilterHashProperties -ErrorAction SilentlyContinue -MaxEvents $Count
+                } else {
+                    $Events = Get-WinEvent -Credential $GetAdminact -FilterHashtable $FilterHashProperties -Computer $Computer -ErrorAction SilentlyContinue -MaxEvents $Count
+                } 
             }
             ##$Events = $Events | Select-Object -first $Count
-            $excludeFilter = 'SYSTEM|LOCAL|NETWORK|СИСТЕМА'
+            $excludeFilter = 'SYSTEM|LOCAL|NETWORK|СИСТЕМА|.*\$$'
             if ($exclude -ne "") {
                 $excludeFilter = $excludeFilter + '|' + $exclude
             }
-            $Events = $Events | Where-Object {($_.id -ne 4624) -or ($_.Properties[5].Value -notmatch $excludeFilter)} |
-             Where-Object {($_.id -ne 4634) -or ($_.Properties[1].Value -notmatch $excludeFilter)} |
-             Foreach-Object {
+            $counter = 0
+            
+            $Events = $Events | Foreach-Object {
                 $cur = $_ 
-                try {
-                    $xml = $_.ToXml()
-                    $cur | Add-Member -MemberType NoteProperty -Name XML -Value $xml -Force
-                } Catch {
-                    Write-Host "error create xml" -ForegroundColor Red
+                if ($cur.Properties[1].Value -notmatch $excludeFilter) {
+                    try {
+                        $xml = $_.ToXml()
+                        $cur | Add-Member -MemberType NoteProperty -Name XML -Value $xml -Force
+                    } Catch {
+                        Write-Host "error create xml" -ForegroundColor Red
+                    }
+                    store($cur)
+                    $counter ++
                 }
-                store($cur)
+                
 
             }
-            Write-host "Found at least $($Events.count) events ! Here are the $NumberOfLastEventsToGet last ones"
+            Write-host "Found at least $($counter) events ! Here are the $NumberOfLastEventsToGet last ones"
                 
         }
         Catch {
