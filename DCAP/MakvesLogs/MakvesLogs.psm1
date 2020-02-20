@@ -61,7 +61,8 @@ function Test-EventLog {
     [string]$makves_url = "", ##"http://10.0.0.10:8000",
     [string]$makves_user = "admin",
     [string]$makves_pwd = "admin",
-    [string]$exclude_user = ""
+    [string]$exclude_user = "",
+    [bool]$split_by_id = $false
 )
 
     $NumberOfLastEventsToGet = $Count
@@ -168,7 +169,13 @@ function Test-EventLog {
     
     
     Write-Host "Starting script..."
-    function ExportFor($eid, $ln, $type) {
+    function ExportFor($eid, $ln, $type, $sp) {
+        if ($true -eq $sp) {
+            $eid | ForEach-Object {
+                ExportFor $_ $ln $type $false
+            }
+            return
+        }
     
         if ($fwd -ne "") {
             $ln = $fwd
@@ -270,50 +277,50 @@ function Test-EventLog {
         Foreach ($i in $target)
         {
             if ($i -eq "Logon" -or $i -eq "All") {
-                ExportFor ("4776","4672", "4624", "4634", "4800", "4801") "Security" "logon"
+                ExportFor ("4776","4672", "4624", "4634", "4800", "4801") "Security" "logon"  $split_by_id
             }
     
             if ($i -eq "Service" -or $i -eq "All") {
-                ExportFor ("7036","7031") "System" "service"
+                ExportFor ("7036","7031") "System" "service"  $split_by_id
             }
     
             if ($i -eq "User" -or $i -eq "All") {
-                ExportFor ("4720", "4722", "4723", "4724", "4725", "4726", "4738", "4740", "4767", "4780", "4794", "5376", "5377") "Security" "user"
+                ExportFor ("4720", "4722", "4723", "4724", "4725", "4726", "4738", "4740", "4767", "4780", "4794", "5376", "5377") "Security" "user"  $split_by_id
             }
     
             if ($i -eq "Computer" -or $i -eq "All") {
-                ExportFor ("4720", "4722", "4725", "4726", "4738", "4740", "4767") "Security" "user"
+                ExportFor ("4720", "4722", "4725", "4726", "4738", "4740", "4767") "Security" "user"  $split_by_id
             }
     
             if ($i -eq "Clean" -or $i -eq "All") {
                 
                 Write-Host "EventID: " $id_clean
-                ExportFor ("1102") "Security" "clean"
+                ExportFor ("1102") "Security" "clean"  $split_by_id
             }
     
             if ($i -eq "File" -or $i -eq "All") {
                 ExportFor("4656", "4663", "4660", "4670", "4658", "5140", "5142", "5143", "5144", "5145") "Security" "file"
             }
             if ($i -eq "Printer" -or $i -eq "All") {
-                ExportFor ("307")  ("Microsoft-Windows-PrintService/Operational") "printer"
+                ExportFor ("307")  ("Microsoft-Windows-PrintService/Operational") "printer"  $split_by_id
             }
     
             if ($i -eq "MSSQL" -or $i -eq "All") {
-                ExportFor ("18456")  "Application" "mssql"
+                ExportFor ("18456")  "Application" "mssql"  $split_by_id
             }
     
             if ($i -eq "RAS" -or $i -eq "All") {
-                ExportFor ("20249", "20250", "20253", "20255", "20258", "20266", "20271", "20272") "RemoteAccess/Operational" "ras"
+                ExportFor ("20249", "20250", "20253", "20255", "20258", "20266", "20271", "20272") "RemoteAccess/Operational" "ras"  $split_by_id
             }
     
             if ($i -eq "USB" -or $i -eq "All") {
-                ExportFor ("2003") "Microsoft-Windows-DriverFrameworks-UserMode/Operational" "usb"
+                ExportFor ("2003") "Microsoft-Windows-DriverFrameworks-UserMode/Operational" "usb"  $split_by_id
             }
             if ($i -eq "Sysmon" -or $i -eq "All") {
-                ExportFor ("1", "3", "5", "11", "12", "13", "14") "Microsoft-Windows-Sysmon/Operational" "sysmon"
+                ExportFor ("1", "3", "5", "11", "12", "13", "14") "Microsoft-Windows-Sysmon/Operational" "sysmon"  $split_by_id
             }    
             if ($i -eq "TS" -or $i -eq "All") {
-                ExportFor ("21", "24") "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational" "ts"
+                ExportFor ("21", "24") "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational" "ts"  $split_by_id
             }
         }
     

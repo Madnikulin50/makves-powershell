@@ -530,25 +530,34 @@ function inspectFolder($f) {
     }
 }
 
-
-if ($base -eq "" ) {
-    inspectFolder $folder
-}
-else {
-    Import-Module ActiveDirectory
-    $GetAdminact = Get-Credential
-    $computers = Get-ADComputer -Filter * -server $server -Credential $GetAdminact -searchbase $base | Select-Object "Name"    
-    $computers | ForEach-Object {
-        $machine = $_.Name
-        Write-Host "export shares from machine: " $machine
-        net view $machine | Select-Object -Skip  7 | Select-Object -SkipLast 2 |
-        ForEach-Object -Process { [regex]::replace($_.trim(), '\s+', ' ') } |
-        ConvertFrom-Csv -delimiter ' ' -Header 'sharename', 'type', 'usedas', 'comment' |
-        foreach-object {
-            inspectFolder "\\$($machine)\$($_.sharename)"
-        }
+if ($computer -ne "" ) {
+    $names = (net view "\\$($computer)\") | ForEach-Object {
+        if($_.IndexOf(' Disk ') -gt 0){ $_.Split('      ')[0] }
+        if($_.IndexOf(' Диск ') -gt 0){ $_.Split('      ')[0] }
     }
+    $names | ForEach-Object {
+        inspectFolder "\\$($computer)\$($_)"
+    }    
+} else {
+    if ($base -eq "" ) {
+        inspectFolder $folder
+    }
+    else {
+        Import-Module ActiveDirectory
+        $GetAdminact = Get-Credential
+        $computers = Get-ADComputer -Filter * -server $server -Credential $GetAdminact -searchbase $base | Select-Object "Name"    
+        $computers | ForEach-Object {
+            $machine = $_.Name
+            Write-Host "export shares from machine: " $machine
+            net view $machine | Select-Object -Skip  7 | Select-Object -SkipLast 2 |
+            ForEach-Object -Process { [regex]::replace($_.trim(), '\s+', ' ') } |
+            ConvertFrom-Csv -delimiter ' ' -Header 'sharename', 'type', 'usedas', 'comment' |
+            foreach-object {
+                inspectFolder "\\$($machine)\$($_.sharename)"
+            }
+        }
 
+    }
 }
 
 if ($threads -gt 1) {

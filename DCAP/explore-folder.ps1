@@ -29,4 +29,6 @@ Test-FileSystem -folder $folder -Outfilename $outfilename -Base $base `
  -hashlen $hashlen -no_hash $no_hash -extruct $extruct `
  -Compliance $compliance -Monitor $monitor `
  -Start $start "" -StartFn $startfn `
- -Makves_url $makves_url -Makves_user $makves_user -Makves_pwd $makves_pwd -Logfilename $logfilename
+ -Makves_url $makves_url -Makves_user $makves_user -Makves_pwd $makves_pwd -Logfilename $logfilename -split_by_id $split_by_id
+
+Remove-Module MakvesFileSystem

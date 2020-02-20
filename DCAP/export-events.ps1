@@ -13,7 +13,8 @@ Param(
     [string]$makves_url = "http://127.0.0.1:8000",
     [string]$makves_user = "admin",
     [string]$makves_pwd = "admin",
-    [string]$exclude_user = ""
+    [string]$exclude_user = "",
+    [switch]$split_by_id = $true
 )
 
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
@@ -25,4 +26,6 @@ Import-Module -Name $scriptPath"\MakvesLogs" -Verbose
 Test-EventLog -Computers $computers -Target $target -Outfilename $outfilename -User $user `
  -Pwd $pwd -Fwd $fwd -Exclude_user $exclude_user -Count $count `
  -Start $start -StartFn $startfn `
- -Makves_url $makves_url -Makves_user $makves_user -Makves_pwd $makves_pwd
+ -Makves_url $makves_url -Makves_user $makves_user -Makves_pwd $makves_pwd -split_by_id $split_by_id
+
+ Remove-Module MakvesFileSystem
