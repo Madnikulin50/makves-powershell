@@ -235,13 +235,13 @@ function Test-FileSystem {
 
             if ($extruct -eq $true) {
                 Try {
-                    $text = $path | Get-Text $path
+                    $text =  Get-DocumentText -File $path
                     $cur | Add-Member -MemberType NoteProperty -Name Text -Value $text -Force
                 }
                 Catch {
-                    Write-Host "Get-Text error:" + $PSItem.Exception.Message
+                    Write-Host " Get-DocumentText error:" + $PSItem.Exception.Message
                     if ($logfilename -ne "") {
-                        "Get-Text error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
+                        " Get-DocumentText error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
                     }
                 }    
             }
@@ -406,13 +406,13 @@ function Test-FileSystem {
             
                     if ($extruct -eq $true) {
                         Try {
-                            $text = $path | Get-Text $path
+                            $text = Get-DocumentText -File $path
                             $cur | Add-Member -MemberType NoteProperty -Name Text -Value $text -Force
                         }
                         Catch {
-                            Write-Host "Get-Text error:" + $PSItem.Exception.Message
+                            Write-Host " Get-DocumentText error:" + $PSItem.Exception.Message
                             if ($logfilename -ne "") {
-                                "Get-Text error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
+                                " Get-DocumentText error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
                             }
                         }    
                     }

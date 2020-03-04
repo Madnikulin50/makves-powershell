@@ -6,7 +6,7 @@ param (
     [string]$server = "",
     [int]$hashlen = 1048576,
     [switch]$no_hash = $false,
-    [switch]$extruct = $false,
+    [switch]$extruct = $true,
     [switch]$compliance = $true,
     [switch]$monitor = $false,
     [int16]$threads = 1,
