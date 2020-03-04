@@ -92,7 +92,7 @@ function Test-EventLog {
      if (($startfn -ne "") -and (Test-Path $startfn))  {
         Try
         {
-            $start = Get-Content $fnstart
+            $start = Get-Content $startfn
         }
         Catch {
             Write-Host "Error read time mark:" + $PSItem.Exception.Message
@@ -225,8 +225,7 @@ function Test-EventLog {
                         $Events = Get-WinEvent -Credential $GetAdminact -FilterHashtable $FilterHashProperties -Computer $Computer -ErrorAction SilentlyContinue -MaxEvents $Count
                     }
                 }
-                $Events | Select-Object -first $NumberOfLastEventsToGet
-                $Events | Foreach-Object {
+                $res = $Events | Foreach-Object {
                     $cur = $_ 
                     try {
                         $xml = $_.ToXml()
@@ -299,7 +298,8 @@ function Test-EventLog {
             }
     
             if ($i -eq "File" -or $i -eq "All") {
-                ExportFor("4656", "4663", "4660", "4670", "4658", "5140", "5142", "5143", "5144", "5145") "Security" "file"
+                ExportFor("5140", "5142", "5143", "5144", "5145") "Security" "file"
+                ExportFor("4656", "4663", "4660", "4670", "4658") "Security" "file"
             }
             if ($i -eq "Printer" -or $i -eq "All") {
                 ExportFor ("307")  ("Microsoft-Windows-PrintService/Operational") "printer"  $split_by_id

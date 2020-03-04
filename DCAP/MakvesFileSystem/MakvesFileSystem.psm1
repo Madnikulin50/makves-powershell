@@ -36,6 +36,9 @@
  Имя файла для метки времени
  .Parameter Logfn
  Имя файла для лога
+ .Parameter Logfn
+ Фильтр для файлов
+ .Parameter Filter
 
 
  .Example
@@ -73,7 +76,8 @@ function Test-FileSystem {
         [string]$makves_user = "admin",
         [string]$makves_pwd = "admin",
         [string]$KB = "",
-        [string]$logfilename = ""##""
+        [string]$logfilename = "", ##"",
+        [string[]]$filter= ("")##("*.doc", "*.docx", "*.xls", "*.xlsx", "*.pdf")
     )
 
     ## Init web server 
@@ -439,6 +443,25 @@ function Test-FileSystem {
 }
 
 
+function inspectFileCall($f) {
+    Try {
+        inspectFileEx $_
+    }
+    Catch {
+        if ($logfilename -ne "") {
+            "inspectFileEx error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
+        }
+        Write-Host "inspectFileEx error:" + $PSItem.Exception.Message
+    }
+}
+if ($start -ne "") {
+    Write-Host "start: " $start
+    if ($logfilename -ne "") {
+        "start:  $($start)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
+    }
+    $starttime = [datetime]::ParseExact($start, 'yyyyMMddHHmmss', $null)
+}
+
 function inspectFolder($f) {
     Try {
         $cur = Get-Item $f  
@@ -497,36 +520,28 @@ function inspectFolder($f) {
 
         
     if ($start -ne "") {
-        Write-Host "start: " $start
-        if ($logfilename -ne "") {
-            "start:  $($start)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
-        }
-        $starttime = [datetime]::ParseExact($start, 'yyyyMMddHHmmss', $null)
-
-        Get-ChildItem $f -Recurse | Where-Object { $_.LastWriteTime -gt $starttime } | Foreach-Object {
-            Try {
-                inspectFileEx $_
-            }
-            Catch {
-                if ($logfilename -ne "") {
-                    "inspectFile error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
-                }
-                Write-Host "inspectFile error:" + $PSItem.Exception.Message
+        if ($filter -ne "") {
+            Get-ChildItem $f -Recurse -Include $filter | Where-Object { $_.LastWriteTime -gt $starttime } | Foreach-Object {
+                inspectFileCall $f
+            }  
+        } else {
+            Get-ChildItem $f -Recurse | Where-Object { $_.LastWriteTime -gt $starttime } | Foreach-Object {
+                inspectFileCall $f
             }
         }
+        
     }
     else {
-        Get-ChildItem $f -Recurse | Foreach-Object {
-            Try {
-                inspectFileEx $_
-            }
-            Catch {
-                Write-Host "inspectFile error:" + $PSItem.Exception.Message
-                if ($logfilename -ne "") {
-                    "inspectFile error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
-                }
+        if ($filter -ne "") {
+            Get-ChildItem $f -Recurse -Include $filter| Foreach-Object {
+                inspectFileCall $f
+            }  
+        } else {
+            Get-ChildItem $f -Recurse | Foreach-Object {
+                inspectFileCall $f
             }
         }
+        
     }
 }
 

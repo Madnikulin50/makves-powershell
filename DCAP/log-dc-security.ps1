@@ -1,14 +1,14 @@
 ﻿[CmdLetBinding(DefaultParameterSetName = "NormalRun")]
 Param(
     [Parameter(Mandatory = $False, Position = 1, ParameterSetName = "NormalRun")] $computers = (""),
-    [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $outfilename = "dc_logs",
+    [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $outfilename = "",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $Count = 1000,
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $Exclude = "",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $user = "current",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $pwd = "",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $start = "",
     [string]$startfn = "", ##".dc-log-monitor.time_mark",
-    [string]$makves_url = "", ##"http://10.0.0.10:8000",
+    [string]$makves_url = "http://127.0.0.1:8000",
     [string]$makves_user = "admin",
     [string]$makves_pwd = "admin"
 )
@@ -71,7 +71,7 @@ else {
 }
   
 function store($data) {
-    if ($outname -ne "") {
+    if ($outfilename -ne "") {
         $data | ConvertTo-Json | Out-File -FilePath $outfile -Encoding UTF8 -Append
     }
     

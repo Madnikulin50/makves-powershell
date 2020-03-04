@@ -1,6 +1,6 @@
 param (
-    [string]$folder = "C:\work\FinCert",
-    [string]$outfilename = "folder", ##"",
+    [string]$folder = "C:\work\experimental",
+    [string]$outfilename = "",
     [string]$computer = "",
     [string]$base = "",
     [string]$server = "",
@@ -11,11 +11,12 @@ param (
     [switch]$monitor = $false,
     [string]$start = "",
     [string]$startfn = "", ##".file-monitor.time_mark",
-    [string]$makves_url =  "", ##"http://192.168.2.22:8000",
+    [string]$makves_url =  "", ##"http://127.0.0.1:8000",
     [string]$makves_user = "admin",
     [string]$makves_pwd = "admin",
-    [string[]]$KB = ("admin"),
-    [string]$logfilename = ""
+    [string[]]$KB = (""),
+    [string]$logfilename = "", ##"",
+    [string[]]$filter= ("")##("*.doc", "*.docx", "*.xls", "*.xlsx", "*.pdf")
 )
 
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
@@ -29,6 +30,7 @@ Test-FileSystem -folder $folder -Outfilename $outfilename -Base $base `
  -hashlen $hashlen -no_hash $no_hash -extruct $extruct `
  -Compliance $compliance -Monitor $monitor `
  -Start $start "" -StartFn $startfn `
- -Makves_url $makves_url -Makves_user $makves_user -Makves_pwd $makves_pwd -Logfilename $logfilename -split_by_id $split_by_id
+ -Makves_url $makves_url -Makves_user $makves_user -Makves_pwd $makves_pwd `
+ -Logfilename $logfilename -split_by_id $split_by_id  -filter $filter
 
 Remove-Module MakvesFileSystem
