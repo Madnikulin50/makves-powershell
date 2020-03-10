@@ -1,14 +1,14 @@
 ﻿[CmdLetBinding(DefaultParameterSetName = "NormalRun")]
 Param(
     [Parameter(Mandatory = $False, Position = 1, ParameterSetName = "NormalRun")] $computers = (""),
-    [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $outfilename = "",
+    [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $outfilename = "dclog",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $Count = 1000,
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $Exclude = "",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $user = "current",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $pwd = "",
     [Parameter(Mandatory = $False, Position = 7, ParameterSetName = "NormalRun")] $start = "",
     [string]$startfn = "", ##".dc-log-monitor.time_mark",
-    [string]$makves_url = "http://127.0.0.1:8000",
+    [string]$makves_url = "",##"http://127.0.0.1:8000",
     [string]$makves_user = "admin",
     [string]$makves_pwd = "admin"
 )
@@ -89,6 +89,25 @@ function store($data) {
     }
 }
 
+$counter = 0
+$excludeFilter = 'SYSTEM|LOCAL|NETWORK|СИСТЕМА|.*\$$'
+if ($exclude -ne "") {
+    $excludeFilter = $excludeFilter + '|' + $exclude
+}
+
+function processEvent($cur) {
+   try {
+        if ($cur.Properties[1].Value -notmatch $excludeFilter) {
+            $xml = $_.ToXml()
+            $cur | Add-Member -MemberType NoteProperty -Name XML -Value $xml -Force
+            store($cur)
+            $counter ++
+        }
+    }
+    Catch {
+        Write-Host "error create xml" -ForegroundColor Red
+    }
+}
 
 function execute () {
     Foreach ($computer in $computers)
@@ -105,40 +124,19 @@ function execute () {
         {
             if ($null -eq $GetAdminact) {
                 if ("" -eq $Computer) {
-                    $Events = Get-WinEvent -FilterHashtable $FilterHashProperties -ErrorAction SilentlyContinue -MaxEvents $Count
+                    Get-WinEvent -FilterHashtable $FilterHashProperties -ErrorAction SilentlyContinue -MaxEvents $Count | ForEach-Object { processEvent $_ }
                 } else {
-                    $Events = Get-WinEvent -FilterHashtable $FilterHashProperties -Computer $Computer -ErrorAction SilentlyContinue -MaxEvents $Count
+                    Get-WinEvent -FilterHashtable $FilterHashProperties -Computer $Computer -ErrorAction SilentlyContinue -MaxEvents $Count | ForEach-Object { processEvent $_ }
                 }
                 
             } else {
                 if ("" -eq $Computer) {
-                    $Events = Get-WinEvent -Credential $GetAdminact -FilterHashtable $FilterHashProperties -ErrorAction SilentlyContinue -MaxEvents $Count
+                    Get-WinEvent -Credential $GetAdminact -FilterHashtable $FilterHashProperties -ErrorAction SilentlyContinue -MaxEvents $Count | ForEach-Object { processEvent $_ }
                 } else {
-                    $Events = Get-WinEvent -Credential $GetAdminact -FilterHashtable $FilterHashProperties -Computer $Computer -ErrorAction SilentlyContinue -MaxEvents $Count
+                    Get-WinEvent -Credential $GetAdminact -FilterHashtable $FilterHashProperties -Computer $Computer -ErrorAction SilentlyContinue -MaxEvents $Count | ForEach-Object { processEvent $_ }
                 } 
             }
-            ##$Events = $Events | Select-Object -first $Count
-            $excludeFilter = 'SYSTEM|LOCAL|NETWORK|СИСТЕМА|.*\$$'
-            if ($exclude -ne "") {
-                $excludeFilter = $excludeFilter + '|' + $exclude
-            }
-            $counter = 0
-            
-            $Events = $Events | Foreach-Object {
-                $cur = $_ 
-                if ($cur.Properties[1].Value -notmatch $excludeFilter) {
-                    try {
-                        $xml = $_.ToXml()
-                        $cur | Add-Member -MemberType NoteProperty -Name XML -Value $xml -Force
-                    } Catch {
-                        Write-Host "error create xml" -ForegroundColor Red
-                    }
-                    store($cur)
-                    $counter ++
-                }
-                
-
-            }
+           
             Write-host "Found at least $($counter) events ! Here are the $NumberOfLastEventsToGet last ones"
                 
         }
