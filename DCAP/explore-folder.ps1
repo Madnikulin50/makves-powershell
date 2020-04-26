@@ -2,6 +2,7 @@ param (
     [string]$folder = "C:\work\experimental",
     [string]$outfilename = "",
     [string]$computer = "",
+    [string[]]$ComputerFolders = ("C$\Users"),
     [string]$base = "",
     [string]$server = "",
     [int]$hashlen = 1048576,
@@ -26,7 +27,7 @@ Write-Host $env:Path
 Import-Module -Name $scriptPath"\MakvesFileSystem" -Verbose
 
 Test-FileSystem -folder $folder -Outfilename $outfilename -Base $base `
- -Server $server -Computer $computer `
+ -Server $server -Computer $computer -ComputerFolders $ComputerFolders`
  -hashlen $hashlen -no_hash $no_hash -extruct $extruct `
  -Compliance $compliance -Monitor $monitor `
  -Start $start "" -StartFn $startfn `

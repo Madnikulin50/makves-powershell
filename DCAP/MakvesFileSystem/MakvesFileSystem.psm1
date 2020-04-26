@@ -64,6 +64,8 @@ function Test-FileSystem {
         [string]$outfilename = "folder", ##"",
         [string]$base = "",
         [string]$server = "",
+        [string]$computer = "",
+        [string[]]$ComputerFolders = ("C$\Users"),
         [int]$hashlen = 1048576,
         [bool]$no_hash = $false,
         [bool]$extruct = $false,
@@ -136,7 +138,7 @@ function Test-FileSystem {
 
     Write-Host "base: " $folder
     Write-Host "outfile: " $outfile
-    Write-Host "outfile: " $logfilename
+    Write-Host "logfile: " $logfilename
 
     Function store($cur) {
         Try {
@@ -199,79 +201,88 @@ function Test-FileSystem {
         if ($logfilename -ne "") {
             "Start inspect file $($cur.FullName)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
         }
-        Try {
-            $acl = Get-Acl $cur.FullName | Select-Object -Property "Owner", "Group", "AccessToString", "Sddl"
-        }
-        Catch {
-            Write-Host "Get-Acl error:" + $PSItem.Exception.Message
-            if ($logfilename -ne "") {
-                "Get-Acl error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
-            }
-        }
         $path = $cur.FullName
-        $ext = $cur.Extension
-            
-        if ($cur.PSIsContainer -eq $false) {
-            if ($no_hash -eq $false) {
-                Try {
-                    $hash = Get-MKVS-FileHash $path
+        if  ((Test-Path -Path $path) -eq $true)
+        {
+            Write-Host "Error access to $($path): path not found"
+            Try {
+                $acl = Get-Acl $path | Select-Object -Property "Owner", "Group", "AccessToString", "Sddl"
+            }
+            Catch {
+                Write-Host "Get-Acl error:" + $PSItem.Exception.Message
+                if ($logfilename -ne "") {
+                    "Get-Acl error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
                 }
-                Catch {
-                    if ($logfilename -ne "") {
-                        "Get-MKVS-FileHash error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
-                    }
-                    Write-Host $PSItem.Exception.Message
+            }
+
+            if ($cur.PSIsContainer -eq $false) {
+                if ($no_hash -eq $false) {
                     Try {
-                        $hash = Get-FileHash $path | Select-Object -Property "Hash"
+                        $hash = Get-MKVS-FileHash $path
                     }
                     Catch {
-                        Write-Host $PSItem.Exception.Message
                         if ($logfilename -ne "") {
-                            "Get-FileHash error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
+                            "Get-MKVS-FileHash error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
+                        }
+                        Write-Host $PSItem.Exception.Message
+                        Try {
+                            $hash = Get-FileHash $path | Select-Object -Property "Hash"
+                        }
+                        Catch {
+                            Write-Host $PSItem.Exception.Message
+                            if ($logfilename -ne "") {
+                                "Get-FileHash error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
+                            }
                         }
                     }
                 }
-            }
-
-            if ($extruct -eq $true) {
-                Try {
-                    $text =  Get-DocumentText -File $path
-                    $cur | Add-Member -MemberType NoteProperty -Name Text -Value $text -Force
-                }
-                Catch {
-                    Write-Host " Get-DocumentText error:" + $PSItem.Exception.Message
-                    if ($logfilename -ne "") {
-                        " Get-DocumentText error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
+    
+                if ($extruct -eq $true) {
+                    Try {
+                        $text =  Get-DocumentText -File $path
+                        $cur | Add-Member -MemberType NoteProperty -Name Text -Value $text -Force
                     }
-                }    
-            }
-
-            if ($compliance -eq $true) {
-                Try {
-                    $compliance = $path | Get-Compliance -KB $KB
-                    
-                    $cur | Add-Member -MemberType NoteProperty -Name Compliance -Value $compliance -Force
+                    Catch {
+                        Write-Host " Get-DocumentText error:" + $PSItem.Exception.Message
+                        if ($logfilename -ne "") {
+                            " Get-DocumentText error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
+                        }
+                    }    
                 }
-                Catch {
-                    Write-Host "Get-Compliance error:" + $PSItem.Exception.Message
-                    if ($logfilename -ne "") {
-                        "Get-Compliance error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
+    
+                if ($compliance -eq $true) {
+                    Try {
+                        $compliance = $path | Get-Compliance -KB $KB
+                        
+                        $cur | Add-Member -MemberType NoteProperty -Name Compliance -Value $compliance -Force
                     }
+                    Catch {
+                        Write-Host "Get-Compliance error:" + $PSItem.Exception.Message
+                        if ($logfilename -ne "") {
+                            "Get-Compliance error: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
+                        }
+                    }
+    
+                    ##Try
+                    ##{
+                    ##    $content =  Get-Document-Text -File $path
+                    ##    Write-Host "Get-Compliance error:" + $PSItem.Exception.Message
+                    ##    $cur | Add-Member -MemberType NoteProperty -Name Content -Value $content -Force
+                    ##}
+                    ##Catch {
+                    ##	Write-Host "Get-Document-Text error:" + $PSItem.Exception.Message
+                    ##}
                 }
-
-                ##Try
-                ##{
-                ##    $content =  Get-Document-Text -File $path
-                ##    Write-Host "Get-Compliance error:" + $PSItem.Exception.Message
-                ##    $cur | Add-Member -MemberType NoteProperty -Name Content -Value $content -Force
-                ##}
-                ##Catch {
-                ##	Write-Host "Get-Document-Text error:" + $PSItem.Exception.Message
-                ##}
+    
+                $cur | Add-Member -MemberType NoteProperty -Name Hash -Value $hash -Force
             }
-
-            $cur | Add-Member -MemberType NoteProperty -Name Hash -Value $hash -Force
+            
         }
+
+        
+        $ext = $cur.Extension
+            
+        
             
         $cur | Add-Member -MemberType NoteProperty -Name ACL -Value $acl -Force
         $cur | Add-Member -MemberType NoteProperty -Name Computer -Value $env:computername -Force
@@ -546,10 +557,15 @@ function inspectFolder($f) {
 }
 
 if ($computer -ne "" ) {
-    $names = (net view "\\$($computer)\") | ForEach-Object {
-        if($_.IndexOf(' Disk ') -gt 0){ $_.Split('      ')[0] }
-        if($_.IndexOf(' Диск ') -gt 0){ $_.Split('      ')[0] }
+    if ($ComputerFolders -ne "") {
+        $names = $ComputerFolders
+    } else {
+        $names = (net view "\\$($computer)\") | ForEach-Object {
+            if($_.IndexOf(' Disk ') -gt 0){ $_.Split('      ')[0] }
+            if($_.IndexOf(' Диск ') -gt 0){ $_.Split('      ')[0] }
+        }
     }
+    
     $names | ForEach-Object {
         inspectFolder "\\$($computer)\$($_)"
     }    

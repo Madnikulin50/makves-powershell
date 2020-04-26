@@ -481,7 +481,7 @@ function Test-ActiveDirectory {
                 "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
                 "Mail", "userAccountControl", "PasswordNeverExpires", "PasswordExpired", "DoesNotRequirePreAuth",
                 "CannotChangePassword", "PasswordNotRequired", "TrustedForDelegation", "TrustedToAuthForDelegation",
-                "Manager", "Enabled", "lastlogondate", "ObjectClass", "logonCount", "LogonHours", "UserPrincipalName", "ServicePrincipalName" | Foreach-Object {
+                "Manager", "Enabled", "lastlogondate", "ObjectClass", "logonCount", "LogonHours", "UserPrincipalName", "ServicePrincipalName", "employeeNumber" | Foreach-Object {
                     inspectUser($_)
                 }
             } else {

@@ -20,7 +20,7 @@ param (
     "Company", "Description", "Department", "OfficeName", "telephoneNumber", "thumbnailPhoto",
     "Mail", "PasswordNeverExpires", "PasswordExpired", "DoesNotRequirePreAuth",
     "CannotChangePassword", "PasswordNotRequired", "TrustedForDelegation", "TrustedToAuthForDelegation",
-    "Manager", "logonCount", "LogonHours")
+    "Manager", "logonCount", "LogonHours", "employeeNumber")
  )
 
 Write-Host "base: " $base
