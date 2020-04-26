@@ -1,0 +1,99 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <m:UploadEmployeesResponse xmlns:m="EmployeesData">
+            <m:return xmlns:xs="http://www.w3.org/2001/XMLSchema"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <m:Staffer>
+                    <m:Name>Иванов Иван Иванович</m:Name>
+                    <m:StartDate>2017-09-01</m:StartDate>
+                    <m:EndDate>2020-08-07</m:EndDate>
+                    <m:Bithday>1981-10-23</m:Bithday>
+                    <m:Organization>ИТАР-ТАСС</m:Organization>
+                    <m:Department>Редакция портала «Это Кавказ»</m:Department>
+                    <m:Appointment/>
+                    <m:DismissalDate>0001-01-01</m:DismissalDate>
+                    <m:ID>гп00001959</m:ID>
+                    <m:SNILS>2F003609432424234411CB1763DE953F2</m:SNILS>
+                    <m:TypeDoc/>
+                    <m:TypeContract>ГПХ</m:TypeContract>
+                    <m:recorder>9cdb5e73-a214-410a-9e23-d97d24fca17f</m:recorder>
+                </m:Staffer>
+                <m:Staffer>
+                    <m:Name>Иванов Иван Иванович</m:Name>
+                    <m:StartDate>2017-09-01</m:StartDate>
+                    <m:EndDate>2020-08-07</m:EndDate>
+                    <m:Bithday>1981-10-23</m:Bithday>
+                    <m:Organization>ИТАР-ТАСС</m:Organization>
+                    <m:Department>Редакция портала «Это Кавказ»</m:Department>
+                    <m:Appointment/>
+                    <m:DismissalDate>0001-01-01</m:DismissalDate>
+                    <m:ID>гп00001959</m:ID>
+                    <m:SNILS>2F003609432424234411CB1763DE953F2</m:SNILS>
+                    <m:TypeDoc/>
+                    <m:TypeContract>ГПХ</m:TypeContract>
+                    <m:recorder>3febde56-838e-4b03-b7f9-56a5aa7bfd7c</m:recorder>
+                </m:Staffer>
+                <m:Staffer>
+                    <m:Name>Иванов Иван Иванович</m:Name>
+                    <m:StartDate>2018-03-14</m:StartDate>
+                    <m:EndDate>2021-03-31</m:EndDate>
+                    <m:Bithday>1981-10-23</m:Bithday>
+                    <m:Organization>ИТАР-ТАСС</m:Organization>
+                    <m:Department>Редакция портала «Это Кавказ»</m:Department>
+                    <m:Appointment/>
+                    <m:DismissalDate>0001-01-01</m:DismissalDate>
+                    <m:ID>гп00001959</m:ID>
+                    <m:SNILS>2F003609432424234411CB1763DE953F2</m:SNILS>
+                    <m:TypeDoc/>
+                    <m:TypeContract>ГПХ</m:TypeContract>
+                    <m:recorder>dfc39676-9d39-41e8-b946-c6676906a001</m:recorder>
+                </m:Staffer>
+				<m:Staffer>
+                    <m:Name>Новиков Андрей Николаевич</m:Name>
+                    <m:StartDate>2019-12-01</m:StartDate>
+                    <m:EndDate>0001-01-01</m:EndDate>
+                    <m:Bithday>1900-01-01</m:Bithday>
+                    <m:Organization>ИТАР-ТАСС</m:Organization>
+                    <m:Department>Отдел информационной безопасности / Управление информационной безопасности и средств технической защиты / Департамент анализа и минимизации рисков</m:Department>
+                    <m:Appointment>Ведущий специалист</m:Appointment>
+                    <m:DismissalDate>0001-01-01</m:DismissalDate>
+                    <m:ID>0000003937</m:ID>
+                    <m:SNILS>4CFA840A5F0е34е34655E51DA40BAEFA3C7D2A</m:SNILS>
+                    <m:TypeDoc>Начальные данные</m:TypeDoc>
+                    <m:TypeContract>Осн</m:TypeContract>
+                    <m:recorder>7f55bee0-1673-11ea-ae55-0050568f6809</m:recorder>
+                </m:Staffer>
+				<m:Staffer>
+                    <m:Name>Петров Петр Петрович</m:Name>
+                    <m:StartDate>2019-12-01</m:StartDate>
+                    <m:EndDate>0001-01-01</m:EndDate>
+                    <m:Bithday>1911-11-18</m:Bithday>
+                    <m:Organization>ИТАР-ТАСС</m:Organization>
+                    <m:Department>Украина, г.Киев / Представительства ИТАР-ТАСС за рубежом</m:Department>
+                    <m:Appointment>Корреспондент</m:Appointment>
+                    <m:DismissalDate>0001-01-01</m:DismissalDate>
+                    <m:ID>0000006578</m:ID>
+                    <m:SNILS/>
+                    <m:TypeDoc>Начальные данные</m:TypeDoc>
+                    <m:TypeContract>Осн</m:TypeContract>
+                    <m:recorder>0c6cba61-1672-11ea-ae55-0050568f6809</m:recorder>
+                </m:Staffer>
+				<m:Staffer>
+                    <m:Name>Кавагути Акио</m:Name>
+                    <m:StartDate>2019-01-01</m:StartDate>
+                    <m:EndDate>2019-12-31</m:EndDate>
+                    <m:Bithday>1910-11-18</m:Bithday>
+                    <m:Organization>ИТАР-ТАСС</m:Organization>
+                    <m:Department>Япония, г.Токио / Представительства ИТАР-ТАСС за рубежом</m:Department>
+                    <m:Appointment/>
+                    <m:DismissalDate>0001-01-01</m:DismissalDate>
+                    <m:ID>гп00004090</m:ID>
+                    <m:SNILS/>
+                    <m:TypeDoc/>
+                    <m:TypeContract>ГПХ</m:TypeContract>
+                    <m:recorder>18b3392c-95f4-4c68-b083-bb03f6aed5dc</m:recorder>
+                </m:Staffer>
+			</m:return>
+        </m:UploadEmployeesResponse>
+    </soap:Body>
+</soap:Envelope>
