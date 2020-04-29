@@ -204,7 +204,6 @@ function Test-FileSystem {
         $path = $cur.FullName
         if  ((Test-Path -Path $path) -eq $true)
         {
-            Write-Host "Error access to $($path): path not found"
             Try {
                 $acl = Get-Acl $path | Select-Object -Property "Owner", "Group", "AccessToString", "Sddl"
             }
@@ -277,6 +276,8 @@ function Test-FileSystem {
                 $cur | Add-Member -MemberType NoteProperty -Name Hash -Value $hash -Force
             }
             
+        } else {
+            Write-Host "Error access to $($path): path not found"
         }
 
         

@@ -93,10 +93,16 @@ function Test-ActiveDirectory {
     $outfile = ""
 
     if ($outfilename -ne "") {
-        $outfile = "$($outfilename)_$LogDate.json"
+        if (($outfilename -match '=.*=') -eq $true) {
+            $outfile = $outfilename -replace "=", ""
+        } else {
+            $outfile = "$($outfilename)_$LogDate.json"
+            
+        }
         if (Test-Path $outfile) {
             Remove-Item $outfile
         }
+        
     }
 
     if (($startfn -ne "") -and (Test-Path $startfn)) {

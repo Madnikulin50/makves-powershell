@@ -2,7 +2,7 @@ param (
     [string]$folder = "C:\work\experimental",
     [string]$outfilename = "",
     [string]$computer = "",
-    [string[]]$ComputerFolders = ("C$\Users"),
+    [string[]]$ComputerFolders = "",
     [string]$base = "",
     [string]$server = "",
     [int]$hashlen = 1048576,

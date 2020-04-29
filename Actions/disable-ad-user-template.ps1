@@ -23,4 +23,4 @@ Disable-ADAccount -Identity {{.NTName}} -Credential $GetAdminact
 #endregion
 
 #region footer
-#end region
+#endregion
