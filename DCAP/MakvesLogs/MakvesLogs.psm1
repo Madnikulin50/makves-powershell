@@ -56,7 +56,7 @@ function Test-EventLog {
     [string]$pwd = "",
     [string]$start = "",
     [string] $fwd = "",
-    [ValidateSet("All","Logon","Service","User","Computer", "Clean", "File", "MSSQL", "RAS", "USB", "Printer", "Sysmon", "TS")] [string[]]$target=("All"),
+    [ValidateSet("All","Logon","Service","User","Computer", "Clean", "File", "MSSQL", "RAS", "USB", "Printer", "Sysmon", "TS", "Policy")] [string[]]$target=("All"),
     [string]$startfn = "", ##".event-monitor.time_mark",
     [string]$makves_url = "", ##"http://10.0.0.10:8000",
     [string]$makves_user = "admin",
@@ -284,11 +284,11 @@ function Test-EventLog {
             }
     
             if ($i -eq "User" -or $i -eq "All") {
-                ExportFor ("4720", "4722", "4723", "4724", "4725", "4726", "4738", "4740", "4767", "4780", "4794", "5376", "5377") "Security" "user"  $split_by_id
+                ExportFor ("4720", "4722", "4723", "4724", "4725", "4726", "4728", "4729", "4738", "4740", "4741", "4742", "4743", "4767", "4780", "4794", "5376", "5377") "Security" "user"  $split_by_id
             }
     
             if ($i -eq "Computer" -or $i -eq "All") {
-                ExportFor ("4720", "4722", "4725", "4726", "4738", "4740", "4767") "Security" "user"  $split_by_id
+                ExportFor ("4721", "4720", "4722", "4725", "4726", "4728", "4729", "4738", "4740", "4741", "4742", "4743", "4767") "Security" "user"  $split_by_id
             }
     
             if ($i -eq "Clean" -or $i -eq "All") {
@@ -322,6 +322,7 @@ function Test-EventLog {
             if ($i -eq "TS" -or $i -eq "All") {
                 ExportFor ("21", "24") "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational" "ts"  $split_by_id
             }
+
         }
     
         Write-Host "Iteration done."
