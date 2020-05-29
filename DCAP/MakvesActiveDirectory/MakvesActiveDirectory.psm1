@@ -293,25 +293,31 @@ function Test-ActiveDirectory {
             [array]$groups = @()
         )
 
-        if ($null -eq $GetAdminact) {
-            $obj = Get-ADObject -server $server $dsn -Properties memberOf
-        }
-        else {
-            $obj = Get-ADObject -server $server  -Credential $GetAdminact $dsn -Properties memberOf
-        }
-        
-
-        foreach ( $groupDsn in $obj.memberOf ) {
+        Try { 
             if ($null -eq $GetAdminact) {
-                $tmpGrp = Get-ADObject -server $server $groupDsn -Properties * | Select-Object "Name", "cn", "distinguishedName", "objectSid", "DisplayName", "memberOf"
+                $obj = Get-ADObject -server $server $dsn -Properties memberOf
             }
             else {
-                $tmpGrp = Get-ADObject -server $server  -Credential $GetAdminact $groupDsn -Properties * | Select-Object "Name", "cn", "distinguishedName", "objectSid", "DisplayName", "memberOf"
+                $obj = Get-ADObject -server $server  -Credential $GetAdminact $dsn -Properties memberOf
             }
-            if ( ($groups | Where-Object { $_.DistinguishedName -eq $groupDsn }).Count -eq 0 ) {
-                $groups += $tmpGrp           
-                $groups = Get-ADPrincipalGroupMembershipRecursive $groupDsn $groups
+            
+
+            foreach ( $groupDsn in $obj.memberOf ) {
+                if ($null -eq $GetAdminact) {
+                    $tmpGrp = Get-ADObject -server $server $groupDsn -Properties * | Select-Object "Name", "cn", "distinguishedName", "objectSid", "DisplayName", "memberOf"
+                }
+                else {
+                    $tmpGrp = Get-ADObject -server $server  -Credential $GetAdminact $groupDsn -Properties * | Select-Object "Name", "cn", "distinguishedName", "objectSid", "DisplayName", "memberOf"
+                }
+                if ( ($groups | Where-Object { $_.DistinguishedName -eq $groupDsn }).Count -eq 0 ) {
+                    $groups += $tmpGrp           
+                    $groups = Get-ADPrincipalGroupMembershipRecursive $groupDsn $groups
+                }
             }
+        }
+        Catch {
+            $msg = "Warning get group membership $cur.DNSHostName : $PSItem.Exception.InnerExceptionMessage"
+            Write-Host $msg -ForegroundColor Yellow
         }
 
         return $groups
