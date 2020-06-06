@@ -98,7 +98,7 @@ function Test-FileSystem {
         Add-Type -AssemblyName 'System.Net.Http'
     }
     $scriptFolder = $MyInvocation.MyCommand.Module.ModuleBase
-    Write-Host "Script folder:" + $scriptFolder
+    Write-Host "Script folder:" $scriptFolder
 
 
     if ($compliance -eq $true) {
