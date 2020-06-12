@@ -475,6 +475,7 @@ if ($start -ne "") {
 }
 
 function inspectFolder($f) {
+    Write-Host "Before read root foolder " $f "Get-Item"
     Try {
         $cur = Get-Item $f  
     }
@@ -486,7 +487,8 @@ function inspectFolder($f) {
         return;
     }
 
-    if ($cur -eq $null) {
+    if ($null -eq $cur) {
+        Write-Host "Root foolder " $f " not found"
         return;
     }
 
@@ -556,6 +558,18 @@ function inspectFolder($f) {
         
     }
 }
+
+Try {
+    Get-WmiObject -Class Win32_logicaldisk
+}
+Catch {
+    Write-Host "Error Get-WmiObject -Class Win32_logicaldisk: " $PSItem.Exception.Message
+    if ($logfilename -ne "") {
+        "Error Get-WmiObject -Class Win32_logicaldisk: $($PSItem.Exception.Message)`r`n" | Out-File -FilePath $logfile -Encoding UTF8 -Append
+    }
+    return;
+}
+
 
 if ($computer -ne "" ) {
     if ($ComputerFolders -ne "") {
