@@ -1,0 +1,80 @@
+﻿<table width="100%" style="width:100%;mso-cellspacing:0cm;mso-yfti-tbllook:1184">
+    <tbody>
+    <tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes">
+        <td nowrap="" style="background:#1A237E;padding:3.0pt 6.0pt 6.0pt 12.0pt">
+            <p class="MsoNormal">
+                <b><span
+                        style='font-size:13.5pt;font-family:"Segoe UI",sans-serif;mso-fareast-font-family:"Times New Roman";color:white'>Makves DCAP:</span></b>
+                <span style='font-size:13.5pt;font-family:"Segoe UI";,sans-serif;mso-fareast-font-family:"Times New Roman";color:white'>&nbsp;{{title}}
+                    <o:p></o:p>
+                </span>
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <th style="background:#BBDEFB;padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E">Время</th>
+            <th style="background:#BBDEFB;padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E">Категория</th>
+            <th style="background:#BBDEFB;padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E">Важность</th>
+            <th style="background:#BBDEFB;padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E">Действие</th>
+            <th style="background:#BBDEFB;padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E">Кто</th>
+            <th style="background:#BBDEFB;padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E">Что</th>
+            <th style="background:#BBDEFB;padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E">Где</th>
+            <th style="background:#BBDEFB;padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E">Поле 1</th>
+            <th style="background:#BBDEFB;padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E">Поле 2</th>
+            <th style="width:30.0%;background:#BBDEFB; padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E">Детали</th>
+        </tr>
+    </thead>
+    <tbody>
+    {{#items}}
+        <tr>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{time_string}}</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI Semibold",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{category}}</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{severity}}</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{action}}</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{who}}</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{what}}</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{where}}</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{aux1}}</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{aux2}}</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>
+                {{#compliance}}
+                    <span style='font-size:10.0pt;font-family:"Segoe UI Semibold",sans-serif;color:red'>◉&nbsp;</span>
+                    {{name}}
+                {{/compliance}}
+                {{#event_id}}
+                    <span style='font-size:10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>Идентификатор:&nbsp;<span style='font-family:"Segoe UI Semibold"'>{{event_id}}</span>&nbsp;</span>
+                {{/event_id}}
+                {{contents}}
+            </td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="11">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+    {{/items}}
+</table>
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+    <tbody>
+    <tr>
+        <td style="background:white;padding:0cm" >
+            <div align="center" style="text-align:center">
+                <span style='font-size:10.0pt;font-family:"Segoe UI",sans-serif;color:black'>
+                    <hr size="1" width="100%" noshade="" style="color:#1171B7">
+                </span>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="background:white;padding:0cm 12.0pt 0cm 12.0pt">
+            <span style='font-size:10.0pt;font-family:"Segoe UI",sans-serif;color:black'>Отчет создан {{report_time}}</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
