@@ -27,17 +27,7 @@ param (
  }
  
  $markTime = Get-Date -format "yyyyMMddHHmmss"
- 
- if (($startfn -ne "") -and (Test-Path $startfn)) {
-     Try
-     {
-         $start = Get-Content $startfn
-     }
-     Catch {
-         Write-Host "Error read time mark:" + $PSItem.Exception.Message
-         $start = ""
-     }
- } 
+
  
  
  
