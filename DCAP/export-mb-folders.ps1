@@ -2,7 +2,8 @@ param (
     [string]$outfilename = ".\explore-mailboxes",
     [string]$makves_url = "", ##"http://10.0.0.10:8000",
     [string]$makves_user = "admin",
-    [string]$makves_pwd = "admin"    
+    [string]$makves_pwd = "admin",
+    $startfn =""
  )
  
  ## Init web server 
@@ -189,4 +190,5 @@ function execute() {
     }
 }
 
-Write-Host $PSItem.Exception.Message -ForegroundColor Green
+execute
+Write-Host "Done" -ForegroundColor Green
