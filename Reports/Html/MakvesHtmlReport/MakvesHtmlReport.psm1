@@ -110,26 +110,50 @@ function New-MakvesSimpleReport {
         }
     }
 
+    if ("items" -in $data.PSobject.Properties.Name) {
 
-    $data.items | ForEach-Object {
-        if ("basic_score" -in $_.PSobject.Properties.Name) {
-            $score = [math]::Ceiling($_.basic_score * 100)
-            $_ | Add-Member -MemberType NoteProperty -Name score -Value $score -Force
+        $data.items | ForEach-Object {
+            if ("basic_score" -in $_.PSobject.Properties.Name) {
+                $score = [math]::Ceiling($_.basic_score * 100)
+                $_ | Add-Member -MemberType NoteProperty -Name score -Value $score -Force
 
-            if ($_.basic_score -ge 0.8) {
-                $_ | Add-Member -MemberType NoteProperty -Name score_color -Value "#f86c6b" -Force
-            } else {
-                if ($_.basic_score -ge 0.3) {
-                    $_ | Add-Member -MemberType NoteProperty -Name score_color -Value "#ffc107" -Force
+                if ($_.basic_score -ge 0.8) {
+                    $_ | Add-Member -MemberType NoteProperty -Name score_color -Value "#f86c6b" -Force
                 } else {
-                    $_ | Add-Member -MemberType NoteProperty -Name score_color -Value "#4dbd74" -Force
+                    if ($_.basic_score -ge 0.3) {
+                        $_ | Add-Member -MemberType NoteProperty -Name score_color -Value "#ffc107" -Force
+                    } else {
+                        $_ | Add-Member -MemberType NoteProperty -Name score_color -Value "#4dbd74" -Force
+                    }
+                }
+            }
+
+            if ("size" -in $_.PSobject.Properties.Name) {
+                $size_string = convertSize $_.size 2
+                $_ | Add-Member -MemberType NoteProperty -Name size_string -Value $size_string -Force            
+            }
+        }
+    }
+    if ("data" -in $data.PSobject.Properties.Name) {
+        $d =  $data.data
+        if ("basic_score" -in $d.PSobject.Properties.Name) {
+            $score = [math]::Ceiling($d.basic_score * 100)
+            $d | Add-Member -MemberType NoteProperty -Name score -Value $score -Force
+
+            if ($d.basic_score -ge 0.8) {
+                $d | Add-Member -MemberType NoteProperty -Name score_color -Value "#f86c6b" -Force
+            } else {
+                if ($d.basic_score -ge 0.3) {
+                    $d | Add-Member -MemberType NoteProperty -Name score_color -Value "#ffc107" -Force
+                } else {
+                    $d | Add-Member -MemberType NoteProperty -Name score_color -Value "#4dbd74" -Force
                 }
             }
         }
 
-        if ("size" -in $_.PSobject.Properties.Name) {
-            $size_string = convertSize $_.size 2
-            $_ | Add-Member -MemberType NoteProperty -Name size_string -Value $size_string -Force            
+        if ("size" -in $d.PSobject.Properties.Name) {
+            $size_string = convertSize $d.size 2
+            $d | Add-Member -MemberType NoteProperty -Name size_string -Value $size_string -Force            
         }
     }
     
@@ -156,7 +180,7 @@ function New-MakvesSimpleReport {
 
     
 
-    if ($null -ne $mail) {
+    if (($null -ne $mail) -and ("" -ne $mail)) {
 
         $SMTPServer = $mail.server
         $SMTPClient = New-Object Net.Mail.SMTPClient($SmtpServer, $mail.port)

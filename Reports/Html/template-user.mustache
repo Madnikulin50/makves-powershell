@@ -1,0 +1,194 @@
+﻿<table width="100%" style="width:100%;mso-cellspacing:0cm;mso-yfti-tbllook:1184">
+    <tbody>
+    <tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes">
+        <td nowrap="" style="background:#1A237E;padding:3.0pt 6.0pt 6.0pt 12.0pt">
+            <p class="MsoNormal">
+                <b><span
+                        style='font-size:13.5pt;font-family:"Segoe UI",sans-serif;mso-fareast-font-family:"Times New Roman";color:white'>Makves DCAP:</span></b>
+                <span style='font-size:13.5pt;font-family:"Segoe UI";,sans-serif;mso-fareast-font-family:"Times New Roman";color:white'>&nbsp;{{#data}}{{#is_user}}Пользователь{{/is_user}}{{#is_group}}Группа{{/is_group}} {{cn}}{{/data}}
+                    <o:p></o:p>
+                </span>
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <th style="background:#BBDEFB;padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E">Свойство</th>
+            <th style="background:#BBDEFB;padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E">Значение</th>
+        </tr>
+    </thead>
+    <tbody>
+    {{#data}}
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Имя</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{cn}}</td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Домен</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{domain}}</td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Риск-фактор</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>
+                <span style='font-size:10.0pt;font-family:"Segoe UI Semibold",sans-serif;color:{{score_color}}'>■&nbsp;</span>
+                {{score}}
+            </td>
+        </tr>
+
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>NT-имя</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{nt_name}}</td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Отличительное имя</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{distinguished_name}}</td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>E-Mail</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{mail}}</td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Телефон</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{phone}}</td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Должность</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{title}}</td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Подразделение</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{department}}</td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Аккаунт</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{sam_account_name}}</td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>SID</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{uid}}</td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Время создания</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{when_created_string}}</td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Время создания</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{when_created_string}}</td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Время последнего изменения</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{when_changed_string}}</td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Последний логон</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{last_logon_string}}</td>
+        </tr>
+        <tr style="mso-yfti-irow:10">
+            <td style="padding:0cm 0cm 0cm 0cm" colspan="2">
+                <hr size="1" width="100%" noshade="" style="color:#D8D8D8" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Состоит в группах</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>
+                {{#member_of}}
+                    <span style='font-size:10.0pt;font-family:"Segoe UI Semibold",sans-serif;color:gray'>◉&nbsp;</span>
+                    {{name}}
+                {{/member_of}}</td>
+            </td>
+        </tr>
+    {{/data}}
+</table>
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+    <tbody>
+    <tr>
+        <td style="background:white;padding:0cm" >
+            <div align="center" style="text-align:center">
+                <span style='font-size:10.0pt;font-family:"Segoe UI",sans-serif;color:black'>
+                    <hr size="1" width="100%" noshade="" style="color:#1171B7">
+                </span>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="background:white;padding:0cm 12.0pt 0cm 12.0pt">
+            <span style='font-size:10.0pt;font-family:"Segoe UI",sans-serif;color:black'>Отчет создан {{report_time}}</span>
+        </td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,295 @@
+﻿<table width="100%" style="width:100%;mso-cellspacing:0cm;mso-yfti-tbllook:1184">
+    <tbody>
+    <tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes">
+        <td nowrap="" style="background:#1A237E;padding:3.0pt 6.0pt 6.0pt 12.0pt">
+            <p class="MsoNormal">
+                <b><span
+                        style='font-size:13.5pt;font-family:"Segoe UI",sans-serif;mso-fareast-font-family:"Times New Roman";color:white'>Makves DCAP:</span></b>
+                <span style='font-size:13.5pt;font-family:"Segoe UI";,sans-serif;mso-fareast-font-family:"Times New Roman";color:white'>Сводный отчет
+                </span>
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="table table-responsive">
+    <tbody>
+    {{#users}}
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Количество доменов</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalDomains}}</td>
+        </tr>
+    {{/users}}
+    </tbody>
+</table>
+
+<table width="100%" style="width:100%;mso-cellspacing:0cm;mso-yfti-tbllook:1184">
+    <tbody>
+    <tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes">
+        <td nowrap="" style="background:{{users.score_color}};padding:3.0pt 6.0pt 6.0pt 12.0pt">
+            <p class="MsoNormal">
+                <div style="width:50%;display: inline-block">
+                <b><span style='font-size:13.5pt;font-family:"Segoe UI",sans-serif;mso-fareast-font-family:"Times New Roman";color:white'>Пользователи</span></b>
+                </div>
+                <div style='text-align:right;display: inline-block;font-size:13.5pt;font-family:"Segoe UI";,sans-serif;mso-fareast-font-family:"Times New Roman";color:white;width:50%'>Риск:&nbsp;{{users.score}}</div>
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="table table-responsive">
+    <tbody>
+    {{#users}}
+    <tr>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Количество пользователей</td>
+        <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{total}}</td>
+        <td style='width:50px'> </td>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Количество групп</td>
+        <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalGroups}}</td>
+    </tr>
+    <tr>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Пользователи неактивные в течении 2-х месяцев</td>
+        <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalInactive}}</td>
+        <td style='width:50px'> </td>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Активные пользователи</td>
+        <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalActive}}</td>
+    </tr>
+    <tr>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Отключенные пользователи</td>
+        <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalDisabled}}</td>
+        <td style='width:50px'> </td>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Заблокированные пользователи</td>
+        <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalLockout}}</td>
+    </tr>
+    <tr>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Служебные учетные записи</td>
+        <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalNotNormalAccount}}</td>
+        <td style='width:50px'> </td>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Междоменные учетные записи</td>
+        <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalInterdomainTrustAccount}}</td>
+    </tr>
+    <tr>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Пользователи с паролем без срока действия</td>
+        <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalDontExpirePassword}}</td>
+        <td style='width:50px'> </td>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Пользователи с просроченным поролем</td>
+        <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalPasswordExpired}}</td>
+    </tr>
+    <tr>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Пользователи c необязательным паролем</td>
+        <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalPasswordNotRequired}}</td>
+        <td style='width:50px'> </td>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Пользователи с паролем без срока действия</td>
+        <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalDontExpirePassword}}</td>
+    </tr>
+    <tr>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Группы не содержащие пользователей</td>
+        <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalEmptyGroups}}</td>
+
+
+    </tr>
+    <tr>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Риски</td>
+        <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>
+            <div>
+                <span style='font-size:10.0pt;font-family:"Segoe UI Semibold",sans-serif;color:#4dbd74'>■&nbsp;</span>Незначительный:&nbsp;
+                <span style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalsRiskMinimal}}</span>
+            </div>
+            <div>
+                <span style='font-size:10.0pt;font-family:"Segoe UI Semibold",sans-serif;color:#ffc107'>■&nbsp;</span>Средний:&nbsp;
+                <span style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalsRiskMedium}}</span>
+            </div>
+            <div>
+                <span style='font-size:10.0pt;font-family:"Segoe UI Semibold",sans-serif;color:#f86c6b'>■&nbsp;</span>Критический:&nbsp;
+                <span style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalsRiskCritical}}</span>
+            </div>
+        </td>
+    </tr>
+    {{/users}}    
+    </tbody>
+</table>
+
+<table width="100%" style="width:100%;mso-cellspacing:0cm;mso-yfti-tbllook:1184">
+    <tbody>
+    <tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes">
+        <td nowrap="" style="background:{{computers.score_color}};padding:3.0pt 6.0pt 6.0pt 12.0pt">
+            <p class="MsoNormal">
+            <div style="width:50%;display: inline-block">
+                <b><span style='font-size:13.5pt;font-family:"Segoe UI",sans-serif;mso-fareast-font-family:"Times New Roman";color:white'>Компьютеры</span></b>
+            </div>
+            <div style='text-align:right;display: inline-block;font-size:13.5pt;font-family:"Segoe UI";,sans-serif;mso-fareast-font-family:"Times New Roman";color:white;width:50%'>Риск:&nbsp;{{computers.score}}</div>
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="table table-responsive">
+    <tbody>
+    {{#computers}}
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Количество компьютеров</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{total}}</td>
+            <td style='width:50px'> </td>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Количество групп</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalGroups}}</td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Группы не содержащие компьютеров</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalEmptyGroups}}</td>
+            <td style='width:50px'> </td>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Активные компьютеры</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalActive}}</td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Отключенные компьютеры</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalDisabled}}</td>
+            <td style='width:50px'> </td>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Заблокированные компьютеры</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalLockout}}</td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Пользователи c необязательным паролем</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalPasswordNotRequired}}</td>
+            <td style='width:50px'> </td>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Пользователи с паролем без срока действия</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalDontExpirePassword}}</td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Риски</td>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>
+                <div>
+                    <span style='font-size:10.0pt;font-family:"Segoe UI Semibold",sans-serif;color:#4dbd74'>■&nbsp;</span>Незначительный:&nbsp;
+                    <span style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalsRiskMinimal}}</span>
+                </div>
+                <div>
+                    <span style='font-size:10.0pt;font-family:"Segoe UI Semibold",sans-serif;color:#ffc107'>■&nbsp;</span>Средний:&nbsp;
+                    <span style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalsRiskMedium}}</span>
+                </div>
+                <div>
+                    <span style='font-size:10.0pt;font-family:"Segoe UI Semibold",sans-serif;color:#f86c6b'>■&nbsp;</span>Критический:&nbsp;
+                    <span style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalsRiskCritical}}</span>
+                </div>
+            </td>
+        </tr>
+    {{/computers}}
+    </tbody>
+</table>
+
+
+<table width="100%" style="width:100%;mso-cellspacing:0cm;mso-yfti-tbllook:1184">
+    <tbody>
+    <tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes">
+        <td nowrap="" style="background:{{files.score_color}};padding:3.0pt 6.0pt 6.0pt 12.0pt">
+            <p class="MsoNormal">
+            <div style="width:50%;display: inline-block">
+                <b><span style='font-size:13.5pt;font-family:"Segoe UI",sans-serif;mso-fareast-font-family:"Times New Roman";color:white'>Файлы</span></b>
+            </div>
+            <div style='text-align:right;display: inline-block;font-size:13.5pt;font-family:"Segoe UI";,sans-serif;mso-fareast-font-family:"Times New Roman";color:white;width:50%'>Риск:&nbsp;{{files.score}}</div>
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="table table-responsive">
+    <tbody>
+    {{#files}}
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Количество файлов</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalFiles}}</td>
+            <td style='width:50px'> </td>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Количество папок</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalFolders}}</td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Общий объем</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalSize}}</td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Риски</td>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>
+                <div>
+                    <span style='font-size:10.0pt;font-family:"Segoe UI Semibold",sans-serif;color:#4dbd74'>■&nbsp;</span>Незначительный:&nbsp;
+                    <span style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalsRiskMinimal}}</span>
+                </div>
+                <div>
+                    <span style='font-size:10.0pt;font-family:"Segoe UI Semibold",sans-serif;color:#ffc107'>■&nbsp;</span>Средний:&nbsp;
+                    <span style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalsRiskMedium}}</span>
+                </div>
+                <div>
+                    <span style='font-size:10.0pt;font-family:"Segoe UI Semibold",sans-serif;color:#f86c6b'>■&nbsp;</span>Критический:&nbsp;
+                    <span style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalsRiskCritical}}</span>
+                </div>
+            </td>
+        </tr>
+    {{/files}}
+    </tbody>
+</table>
+
+
+<table width="100%" style="width:100%;mso-cellspacing:0cm;mso-yfti-tbllook:1184">
+    <tbody>
+    <tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes">
+        <td nowrap="" style="background:{{events.score_color}};padding:3.0pt 6.0pt 6.0pt 12.0pt">
+            <p class="MsoNormal">
+            <div style="width:50%;display: inline-block">
+                <b><span style='font-size:13.5pt;font-family:"Segoe UI",sans-serif;mso-fareast-font-family:"Times New Roman";color:white'>События</span></b>
+            </div>
+            <div style='text-align:right;display: inline-block;font-size:13.5pt;font-family:"Segoe UI";,sans-serif;mso-fareast-font-family:"Times New Roman";color:white;width:50%'>Риск:&nbsp;{{events.score}}</div>
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="table table-responsive">
+    <tbody>
+    {{#events}}
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Количество событий за все время</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{total}}</td>
+            <td style='width:50px'> </td>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Количество событий за сегодня</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totalsToday}}</td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Количество событий за последние 7 дней</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totals7Day}}</td>
+            <td style='width:50px'> </td>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>Количество событий за последние 30 дней</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{totals30Day}}</td>
+        </tr>
+        <tr>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>В среднем за день</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{avgByDay}}</td>
+            <td style='width:50px'> </td>
+            <td style='padding:3.0pt 12.0pt 4.5pt 12.0pt;color:#1A237E;font-family:"Segoe UI Semibold",sans-serif;'>В среднем за час</td>
+            <td style='font-size: 10.0pt;font-family:"Segoe UI",sans-serif;padding:0cm 12.0pt 0cm 12.0pt'>{{avgByHour}}</td>
+        </tr>
+    {{/events}}
+    </tbody>
+</table>
+
+
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+    <tbody>
+    <tr>
+        <td style="background:white;padding:0cm" >
+            <div align="center" style="text-align:center">
+                <span style='font-size:10.0pt;font-family:"Segoe UI",sans-serif;color:black'>
+                    <hr size="1" width="100%" noshade="" style="color:#1171B7">
+                </span>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="background:white;padding:0cm 12.0pt 0cm 12.0pt">
+            <span style='font-size:10.0pt;font-family:"Segoe UI",sans-serif;color:black'>Отчет создан {{report_time}}</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
