@@ -3,23 +3,88 @@ param (
     [string]$makves_url = "", ##"http://10.0.0.10:8000",
     [string]$makves_user = "admin",
     [string]$makves_pwd = "admin",
-    [string]$startfn = "" ##".mb-monitor.time_mark",
-)
+    $startfn =""
+ )
+ 
+ ## Init web server 
+ $uri = $makves_url + "/agent/push"
+ $pair = "${makves_user}:${makves_pwd}"
+ 
+ $bytes = [System.Text.Encoding]::ASCII.GetBytes($pair)
+ $base64 = [System.Convert]::ToBase64String($bytes)
+ 
+ $basicAuthValue = "Basic $base64"
+ 
+ $headers = @{ Authorization = $basicAuthValue}
+ 
+ if ($makves_url -eq "") {
+     $uri = ""
+     Add-Type -AssemblyName 'System.Net.Http'
+ }
+ 
+ 
+ if ($compliance -eq $true) {
+     Import-Module "./compliance.dll" -Verbose
+ }
+ 
+ $markTime = Get-Date -format "yyyyMMddHHmmss"
+ 
+  if ($startfn -ne "") {
+     Try
+     {
+         $start = Get-Content $startfn
+     }
+     Catch {
+         Write-Host "Error read time mark:" + $PSItem.Exception.Message
+         $start = ""
+     }
+ } 
+ 
+ 
+ 
+ $LogDate = get-date -f yyyyMMddhhmm 
+ $outfile = ""
+ 
+ if ($outfilename -ne "") {
+     $outfile = "$($outfilename)_$LogDate.json"
+     if (Test-Path $outfile) 
+     {
+         Remove-Item $outfile
+     }
+ }
+ 
+ Write-Host "outfile: " $outfile
 
-## Init web server
-$uri = $makves_url + "/agent/push"
-$pair = "${makves_user}:${makves_pwd}"
+ function inspect($item) {
+  $t = $item 
+  $t | Add-Member -MemberType NoteProperty -Name Type -Value "exchange-mailbox" -Force        
+  $t | Add-Member -MemberType NoteProperty -Name Forwarder -Value "exchange-mailboxes-forwarder" -Force
+  
 
-$bytes = [System.Text.Encoding]::ASCII.GetBytes($pair)
-$base64 = [System.Convert]::ToBase64String($bytes)
 
-$basicAuthValue = "Basic $base64"
+  $JSON = $t | ConvertTo-Json
+  Try
+  {
+      if ($outfile -ne "") {
+          $JSON | Out-File -FilePath $outfile -Encoding UTF8 -Append
+      }
+     
+      if ($uri -ne "") {
+          Try
+          {
+              $body = [System.Text.Encoding]::UTF8.GetBytes($JSON.ToString());
 
-$headers = @{ Authorization = $basicAuthValue}
-
-if ($makves_url -eq "") {
-    $uri = ""
-    Add-Type -AssemblyName 'System.Net.Http'
+              $resp = Invoke-WebRequest -Uri $uri -Method Post -Body $body -ContentType "application/json" -Headers $headers
+              #Write-Host  "Send data to server:" + $cur.Name
+          }
+          Catch {
+              Write-Host "Error send data to server:" + $PSItem.Exception.Message
+          }
+      }
+  }
+  Catch {
+      Write-Host $PSItem.Exception.Message
+  }
 }
 
 
