@@ -28,4 +28,4 @@ Test-EventLog -Computers $computers -Target $target -Outfilename $outfilename -U
  -Start $start -StartFn $startfn `
  -Makves_url $makves_url -Makves_user $makves_user -Makves_pwd $makves_pwd -split_by_id $split_by_id
 
- Remove-Module MakvesFileSystem
+ Remove-Module MakvesLogs

@@ -41,6 +41,7 @@ function New-MakvesSimpleReport {
         [string]$outfilename = "",
         [string]$title = "",
         [string]$path = "",
+        [string]$search = "",
         $mail = $null,
         [scriptblock]$preprocessor = $null
     )
@@ -84,6 +85,7 @@ function New-MakvesSimpleReport {
     }
     if ("" -ne $path) {
         if ("" -ne $search) {
+            Add-Type -AssemblyName System.Web
             $path = $path + "?q=" + [System.Web.HTTPUtility]::UrlEncode($search)
         }
         $makves_url = $makves_url + $path
